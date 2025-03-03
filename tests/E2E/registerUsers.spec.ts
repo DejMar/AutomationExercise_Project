@@ -16,15 +16,14 @@ let signUpPage: SignUpPage
     await sharedSteps.takeScreenshotOnFailure(page, { status: test.info().status ?? '', title: test.info().title });
   });
 
-  test('TC01 Register new user', async ({ page }) => {
+  test.only('TC01 Register new user', async ({ page }) => {
   const newUser = generateUser();
   await page.goto('/')
   await signUpPage.clickLoginButton();
   await signUpPage.populateAndSubmitSignUpForm(newUser);
   await signUpPage.createNewUser(newUser);
-
-  //const isSignUpSuccessful = await signUpPage.isSignUpSuccessful();
-  //expect(isSignUpSuccessful).toBe(true);
-
+  await signUpPage.isSignUpSuccessful();
+  await signUpPage.clickContinueButton();
+  await signUpPage.isLogoutButtonDisplayed();
   })
 })

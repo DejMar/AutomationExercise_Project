@@ -22,21 +22,41 @@ export class SharedSteps {
     }
   }
 
-  async compareJsonFiles(filePath1: string, fileName1: string, filePath2: string, fileName2: string) {
+  async compareJsonFiles(filePath1: string, fileName1: string, filePath2: string, fileName2: string): Promise<boolean> {
     const fullFilePath1 = path.join(__dirname, filePath1, fileName1);
     const fullFilePath2 = path.join(__dirname, filePath2, fileName2);
 
-    const file1 = JSON.parse(await fs.readFile(fullFilePath1, 'utf8'));
-    const file2 = JSON.parse(await fs.readFile(fullFilePath2, 'utf8'));
+    try {
+      const file1Content = await fs.readFile(fullFilePath1, 'utf8');
+      const file2Content = await fs.readFile(fullFilePath2, 'utf8');
 
-    if (file1.length !== file2.length) {
-      return false;
+      const file1 = JSON.parse(file1Content);
+      const file2 = JSON.parse(file2Content);
+
+      // Check if files contain arrays
+      if (!Array.isArray(file1.brands) || !Array.isArray(file2.brands)) {
+        throw new Error('JSON files must contain arrays under "brands" key');
+      }
+
+      const brands1 = file1.brands;
+      const brands2 = file2.brands;
+
+      if (brands1.length !== brands2.length) {
+        return false;
+      }
+
+      const sortedFile1 = brands1
+        .map((item: Record<string, unknown>) => JSON.stringify(Object.entries(item).sort()))
+        .sort();
+      const sortedFile2 = brands2
+        .map((item: Record<string, unknown>) => JSON.stringify(Object.entries(item).sort()))
+        .sort();
+
+      return JSON.stringify(sortedFile1) === JSON.stringify(sortedFile2);
+    } catch (error) {
+      console.error('Error comparing JSON files:', error);
+      throw error;
     }
-
-    const sortedFile1 = file1.map((item: Record<string, unknown>) => JSON.stringify(Object.entries(item).sort())).sort();
-    const sortedFile2 = file2.map((item: Record<string, unknown>) => JSON.stringify(Object.entries(item).sort())).sort();
-
-    return JSON.stringify(sortedFile1) === JSON.stringify(sortedFile2);
   }
 
 

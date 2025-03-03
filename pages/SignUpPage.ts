@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 import { User } from '../shared/UserData';
 
 export class SignUpPage {
@@ -27,6 +27,8 @@ export class SignUpPage {
     private mobileNumberInput = '#mobile_number';
     private createAccountButton = 'button[data-qa="create-account"]';
     private loginButton = 'a[href="/login"]';
+    private continueButton = '//a[@data-qa="continue-button"]';
+    private logoutButton = 'a[href="/logout"]';
 
     constructor(page: Page) {
         this.page = page;
@@ -79,8 +81,20 @@ export class SignUpPage {
     }
 
     async isSignUpSuccessful() {
-        // Implement logic to check if sign up was successful
-        // For example, check for a success message or redirection
-        return await this.page.isVisible('.success-message');
+        const congratsMessage = await this.page.locator('p').first().textContent();
+        const privilegesMessage = await this.page.locator('p').nth(1).textContent();
+        expect(congratsMessage).toBe('Congratulations! Your new account has been successfully created!');
+        expect(privilegesMessage).toBe('You can now take advantage of member privileges to enhance your online shopping experience with us.');
+        const successMessage = await this.page.locator('b').textContent();
+        return successMessage === 'Account Created!';
+    }
+    async clickContinueButton() {
+        await this.page.click(this.continueButton);
+    }
+
+    async isLogoutButtonDisplayed(): Promise<boolean> {
+        const logoutButton = this.page.locator(this.logoutButton);
+        await logoutButton.waitFor({state: 'visible'});
+        return await logoutButton.isVisible();
     }
 }
