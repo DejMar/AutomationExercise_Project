@@ -16,7 +16,7 @@ let signUpPage: SignUpPage
     await sharedSteps.takeScreenshotOnFailure(page, { status: test.info().status ?? '', title: test.info().title });
   });
 
-  test.only('TC01 Register new user', async ({ page }) => {
+  test('TC01 Register new user', async ({ page }) => {
   const newUser = generateUser();
   await page.goto('/')
   await signUpPage.clickLoginButton();
