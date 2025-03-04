@@ -26,9 +26,12 @@ export class SignUpPage {
     private zipcodeInput = '#zipcode';
     private mobileNumberInput = '#mobile_number';
     private createAccountButton = 'button[data-qa="create-account"]';
-    private loginButton = 'a[href="/login"]';
+    private loginSignInButton = 'a[href="/login"]';
     private continueButton = '//a[@data-qa="continue-button"]';
     private logoutButton = 'a[href="/logout"]';
+    private loginEmailInput = '[data-qa="login-email"]';
+    private loginPasswordInput = '[data-qa="login-password"]';
+    private loginButton = '[data-qa="login-button"]';
 
     constructor(page: Page) {
         this.page = page;
@@ -41,7 +44,7 @@ export class SignUpPage {
     }
 
     async clickLoginButton() {
-        await this.page.click(this.loginButton);
+        await this.page.click(this.loginSignInButton);
     }
     async populateAndSubmitSignUpForm(user: User) {
         await this.page.fill('input[data-qa="signup-name"]', user.name);
@@ -96,5 +99,11 @@ export class SignUpPage {
         const logoutButton = this.page.locator(this.logoutButton);
         await logoutButton.waitFor({state: 'visible'});
         return await logoutButton.isVisible();
+    }
+
+    async loginWithCredentials(email: string, password: string) {
+        await this.page.fill(this.loginEmailInput, email);
+        await this.page.fill(this.loginPasswordInput, password);
+        await this.page.click(this.loginButton);
     }
 }
