@@ -106,4 +106,11 @@ export class SignUpPage {
         await this.page.fill(this.loginPasswordInput, password);
         await this.page.click(this.loginButton);
     }
+    
+    async verifyErrorMessage(expectedMessage: string): Promise<boolean> {
+        const errorMessage = await this.page.locator('p[style="color: red;"]');
+        await errorMessage.waitFor({ state: 'visible' });
+        const messageText = await errorMessage.textContent();
+        return messageText === expectedMessage;
+    }
 }

@@ -28,10 +28,17 @@ test.describe('Manipulating users', () => {
         await signUpPage.isLogoutButtonDisplayed();
     });
 
-    test.only('TC02 Login with new user', async ({ page }) => {
+    test('TC02 Login with new user', async ({ page }) => {
         await page.goto('/')
         await signUpPage.clickLoginButton();
         await signUpPage.loginWithCredentials('Ana_Kihn2@hotmail.com', 'gVkmR3KjKdeKIE2');
         await signUpPage.isLogoutButtonDisplayed();
+    });
+
+    test.only('TC03 Login with invalid user', async ({ page }) => {
+        await page.goto('/')
+        await signUpPage.clickLoginButton();
+        await signUpPage.loginWithCredentials('Ana_Kihn2@hotmail.com', 'gVkmR3KjKd');
+        await signUpPage.verifyErrorMessage('Your email or password is incorrect!');
     });
 });
