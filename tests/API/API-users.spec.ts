@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { SharedSteps } from '../../shared/SharedSteps';
 import * as fs from 'fs/promises';
 import { generateUser } from '../../shared/UserData';
-
+import { validationMessages } from '../../messages/validationMessages';
 test.describe('Users API Tests', () => {
     let sharedSteps: SharedSteps;
     const CREATE_ACCOUNT_ENDPOINT = "https://automationexercise.com/api/createAccount";
@@ -39,7 +39,77 @@ test.describe('Users API Tests', () => {
         expect(responseBody.message).toBe('User exists!');
     });
 
-    test('08 - POST /api/createAccount with valid data returns success', async ({ request }) => {
+    test('08 - POST /api/verifyLogin without email parameter returns 400', async ({ request }) => {
+        // Prepare form data with only password
+        const formData = new URLSearchParams();
+        formData.append('password', 'testpassword');
+
+        // Send POST request
+        const response = await request.post(VERIFY_LOGIN_ENDPOINT, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            data: formData.toString()
+        });
+
+        // Verify response status is 200 (API returns 200 even for error cases)
+        expect(response.status()).toBe(200);
+
+        // Parse response body
+        const responseBody = await response.json();
+
+        // Verify response code is 400
+        expect(responseBody.responseCode).toBe(400);
+
+        // Verify error message
+        expect(responseBody.message).toBe(validationMessages.badRequestMessage);
+    });
+
+    test('09 - DELETE /api/verifyLogin returns method not supported', async ({ request }) => {
+        // Send DELETE request
+        const response = await request.delete(VERIFY_LOGIN_ENDPOINT);
+
+        // Verify response status is 200 (API returns 200 even for error cases)
+        expect(response.status()).toBe(200);
+
+        // Parse response body
+        const responseBody = await response.json();
+
+        // Verify response code is 405
+        expect(responseBody.responseCode).toBe(405);
+
+        // Verify error message
+        expect(responseBody.message).toBe(validationMessages.methodNotSupportedMessage);
+    });
+
+    test('10 - POST /api/verifyLogin with invalid credentials returns user not found', async ({ request }) => {
+        // Create form data with invalid credentials
+        const formData = new URLSearchParams();
+        formData.append('email', 'invalid@email.com');
+        formData.append('password', 'invalidpassword');
+
+        // Send POST request
+        const response = await request.post(VERIFY_LOGIN_ENDPOINT, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            data: formData.toString()
+        });
+
+        // Verify response status is 200 (API returns 200 even for error cases)
+        expect(response.status()).toBe(200);
+
+        // Parse response body
+        const responseBody = await response.json();
+
+        // Verify response code is 404
+        expect(responseBody.responseCode).toBe(404);
+
+        // Verify error message
+        expect(responseBody.message).toBe(validationMessages.userNotFoundMessage);
+    });
+
+    test('11 - POST /api/createAccount with valid data returns success', async ({ request }) => {
         // Prepare form data
         const user = generateUser();
         const formData = new URLSearchParams();
@@ -79,55 +149,11 @@ test.describe('Users API Tests', () => {
         expect(responseBody.responseCode).toBe(201);
 
         // Verify success message
-        expect(responseBody.message).toBe('User created!');
+        expect(responseBody.message).toBe(validationMessages.userCreatedMessage);
 
         // Log user credentials for reference
         console.log('Created user credentials:');
         console.log(`Email: ${user.email}`);
         console.log(`Password: ${user.password}`);
-    });
-
-    test('09 - DELETE /api/verifyLogin returns method not supported', async ({ request }) => {
-        // Send DELETE request
-        const response = await request.delete(VERIFY_LOGIN_ENDPOINT);
-
-        // Verify response status is 200 (API returns 200 even for error cases)
-        expect(response.status()).toBe(200);
-
-        // Parse response body
-        const responseBody = await response.json();
-
-        // Verify response code is 405
-        expect(responseBody.responseCode).toBe(405);
-
-        // Verify error message
-        expect(responseBody.message).toBe('This request method is not supported.');
-    });
-
-    test('10 - POST /api/verifyLogin with invalid credentials returns user not found', async ({ request }) => {
-        // Create form data with invalid credentials
-        const formData = new URLSearchParams();
-        formData.append('email', 'invalid@email.com');
-        formData.append('password', 'invalidpassword');
-
-        // Send POST request
-        const response = await request.post(VERIFY_LOGIN_ENDPOINT, {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            data: formData.toString()
-        });
-
-        // Verify response status is 200 (API returns 200 even for error cases)
-        expect(response.status()).toBe(200);
-
-        // Parse response body
-        const responseBody = await response.json();
-
-        // Verify response code is 404
-        expect(responseBody.responseCode).toBe(404);
-
-        // Verify error message
-        expect(responseBody.message).toBe('User not found!');
     });
 });

@@ -1,5 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { User } from '../shared/UserData';
+import { validationMessages } from '../messages/validationMessages';
 
 export class SignUpPage {
     private page: Page;
@@ -32,10 +33,16 @@ export class SignUpPage {
     private loginEmailInput = '[data-qa="login-email"]';
     private loginPasswordInput = '[data-qa="login-password"]';
     private loginButton = '[data-qa="login-button"]';
+    private errorMessage: Locator;
 
+    private signupNameInput = 'input[data-qa="signup-name"]';
+    private signupEmailInput = 'input[data-qa="signup-email"]';
+    private signupButton = 'button[data-qa="signup-button"]';
+    
     constructor(page: Page) {
         this.page = page;
         this.passwordInput = this.page.getByLabel('Password *');
+        this.errorMessage = this.page.locator('p[style="color: red;"]');
     }
 
     // Methods
@@ -47,9 +54,9 @@ export class SignUpPage {
         await this.page.click(this.loginSignInButton);
     }
     async populateAndSubmitSignUpForm(user: User) {
-        await this.page.fill('input[data-qa="signup-name"]', user.name);
-        await this.page.fill('input[data-qa="signup-email"]', user.email);
-        await this.page.click('button[data-qa="signup-button"]');
+        await this.page.fill(this.signupNameInput, user.name);
+        await this.page.fill(this.signupEmailInput, user.email);
+        await this.page.click(this.signupButton);
     }
 
     async fillSignUpForm(user: User) {
@@ -86,8 +93,8 @@ export class SignUpPage {
     async isSignUpSuccessful() {
         const congratsMessage = await this.page.locator('p').first().textContent();
         const privilegesMessage = await this.page.locator('p').nth(1).textContent();
-        expect(congratsMessage).toBe('Congratulations! Your new account has been successfully created!');
-        expect(privilegesMessage).toBe('You can now take advantage of member privileges to enhance your online shopping experience with us.');
+        expect(congratsMessage).toBe(validationMessages.congratsMessage);
+        expect(privilegesMessage).toBe(validationMessages.privilegesMessage);
         const successMessage = await this.page.locator('b').textContent();
         return successMessage === 'Account Created!';
     }
@@ -108,9 +115,12 @@ export class SignUpPage {
     }
     
     async verifyErrorMessage(expectedMessage: string): Promise<boolean> {
-        const errorMessage = await this.page.locator('p[style="color: red;"]');
-        await errorMessage.waitFor({ state: 'visible' });
-        const messageText = await errorMessage.textContent();
+        await this.errorMessage.waitFor({ state: 'visible' });
+        const messageText = await this.errorMessage.textContent();
         return messageText === expectedMessage;
+    }
+
+    async clickLogoutButton() {
+        await this.page.click(this.logoutButton);
     }
 }
