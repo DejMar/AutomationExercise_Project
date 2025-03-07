@@ -6,5 +6,6 @@ export const validationMessages = {
     userExistsMessage: 'User exists!',
     userNotFoundMessage: 'User not found!',
     methodNotSupportedMessage: 'This request method is not supported.',
-    userCreatedMessage: 'User created!'
+    userCreatedMessage: 'User created!',
+    accountDeletedMessage: 'Account deleted!'
 }
