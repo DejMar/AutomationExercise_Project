@@ -15,7 +15,7 @@ test.describe('Contact Us Form Tests', () => {
         await sharedSteps.takeScreenshotOnFailure(page, { status: test.info().status ?? '', title: test.info().title });
     });
 
-    test.only('TC06 Submit Contact Us form successfully', async ({ page }) => {
+    test('TC06 Submit Contact Us form successfully', async ({ page }) => {
         const contactUsPage = new ContactUsPage(page);
         const user = generateUser();
         await contactUsPage.clickContactUsButton();
