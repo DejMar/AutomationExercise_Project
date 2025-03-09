@@ -53,11 +53,6 @@ export class SignUpPage {
     async clickLoginButton() {
         await this.page.click(this.loginSignInButton);
     }
-    async populateAndSubmitSignUpForm(user: User) {
-        await this.page.fill(this.signupNameInput, user.name);
-        await this.page.fill(this.signupEmailInput, user.email);
-        await this.page.click(this.signupButton);
-    }
 
     async fillSignUpForm(user: User) {
         await this.page.click(user.title === 'Mr' ? this.titleMr : this.titleMrs);

@@ -23,7 +23,7 @@ test.describe('Users manipulation positive cases', () => {
     test('TC01 Register new user', async ({ }) => {
         newUser = generateUser();
         await signUpPage.clickLoginButton();
-        await signUpPage.populateAndSubmitSignUpForm(newUser);
+        await signUpPage.signInWithCredentials(newUser.name, newUser.email);
         await signUpPage.createNewUser(newUser);
         await signUpPage.isSignUpSuccessful();
         await signUpPage.clickContinueButton();
