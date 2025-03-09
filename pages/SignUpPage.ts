@@ -113,6 +113,12 @@ export class SignUpPage {
         await this.page.fill(this.loginPasswordInput, password);
         await this.page.click(this.loginButton);
     }
+
+    async signInWithCredentials(name: string, email: string) {
+        await this.page.fill(this.signupNameInput, name);
+        await this.page.fill(this.signupEmailInput, email);
+        await this.page.click(this.signupButton);
+    }
     
     async verifyErrorMessage(expectedMessage: string): Promise<boolean> {
         await this.errorMessage.waitFor({ state: 'visible' });

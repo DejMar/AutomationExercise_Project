@@ -25,10 +25,10 @@ test.describe('Product Page Tests', () => {
         await productPage.verifyReviewSection();
     });
 
-    test.only('TC09 Search Product', async ({ page }) => {
+    test('TC09 Search Product', async ({ page }) => {
         await productPage.clickProductsButton();
         await productPage.verifyAllProductsTitle();
-        await productPage.searchProduct('green');
-        await productPage.verifySearchResults('green');
+        await productPage.searchProduct('blue');
+        await productPage.verifySearchResults('blue');
     });
 });

@@ -52,6 +52,7 @@ export class ProductPage {
 
     private searchInput = '#search_product';
     private submitSearchButton = '#submit_search';
+    private searchedProductTitle = '.features_items .productinfo p';
 
     constructor(page: Page) {
         this.page = page;
@@ -141,12 +142,10 @@ export class ProductPage {
         await this.page.fill(this.searchInput, searchTerm);
         await this.page.click(this.submitSearchButton);
     }
-    private searchedProductTitle = '.features_items .productinfo .product-information p';
     
-    //TODO Fix this method
     async verifySearchResults(searchTerm: string) {
         // Get all product titles
-        const productTitles = await this.page.locator('.features_items .productinfo p').all();
+        const productTitles = await this.page.locator(this.searchedProductTitle).all();
         
         // Verify each product title contains the search term
         for (const title of productTitles) {

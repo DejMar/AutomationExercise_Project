@@ -43,7 +43,8 @@ export class ContactUsPage {
     async submitForm() {
         await this.page.click(this.submitButton);
     }
-//TODO: This is a temporary solution to handle the alert. We need to find a better way to handle this.
+    //TODO: This is a temporary solution to handle the alert. We need to find a better way to handle this.
+    //TODO: Needs to be fixed
     async handleAlert() {
         await this.page.waitForTimeout(10000);
         await this.page.on('dialog', async dialog => {

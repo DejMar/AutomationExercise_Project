@@ -24,7 +24,7 @@ test.describe('Contact Us Form Tests', () => {
         await contactUsPage.uploadFile('data/test-file.txt');
         await contactUsPage.submitForm();
 
-       // await contactUsPage.handleAlert();
+        //await contactUsPage.handleAlert();
         await contactUsPage.verifySuccessMessage();
     });
 });

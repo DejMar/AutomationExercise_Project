@@ -66,6 +66,12 @@ test.describe('Users manipulation negative cases', () => {
     });
 
     test('TC05 Register User with existing email', async ({ }) => {
-        
+        await signUpPage.clickLoginButton();
+        await signUpPage.loginWithCredentials(userData.validUsername, userData.validPassword);
+        await signUpPage.isLogoutButtonDisplayed();
+        await signUpPage.clickLogoutButton();
+        await signUpPage.clickLoginButton();
+        await signUpPage.signInWithCredentials(userData.validName, userData.validUsername);
+        await signUpPage.verifyErrorMessage(validationMessages.emailExistsMessage);
     });
 });
