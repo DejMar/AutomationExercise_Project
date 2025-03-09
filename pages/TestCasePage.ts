@@ -54,7 +54,7 @@ export class TestCasePage {
             const path = require('path');
             
             const report = {
-                timestamp: new Date().toISOString(),
+                timestamp: new Date().toISOString().split('T')[0],
                 totalTestCases: maxLength,
                 mismatches: mismatches,
                 actualTestCases: trimmedTestCases,

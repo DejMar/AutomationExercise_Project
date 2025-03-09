@@ -16,7 +16,7 @@ test.describe('Test Cases Page Tests', () => {
         await sharedSteps.takeScreenshotOnFailure(page, { status: test.info().status ?? '', title: test.info().title });
     });
 
-    test.only('TC07 Verify Test Cases Page', async ({ page }) => {
+    test('TC07 Verify Test Cases Page', async ({ page }) => {
         await testCasePage.clickTestCasesButton();
         await testCasePage.verifyTestCasesPageTitle();
         await testCasePage.verifyTestCasesDescription();
