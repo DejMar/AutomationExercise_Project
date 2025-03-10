@@ -59,7 +59,6 @@ export class SharedSteps {
     }
   }
 
-
   async acceptCookiesIfPresent() {
     try {
       const cookieButton = this.page.locator(this.acceptCookiesButton);
@@ -69,6 +68,22 @@ export class SharedSteps {
       }
     } catch (error) {
       console.log('Cookie banner not found or already accepted');
+    }
+  }
+
+  async verifyHomePageIsVisible() {
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.page.waitForSelector('h1');
+    await this.page.waitForSelector('h2');
+    await this.page.waitForSelector('h3');
+  }
+  
+  async saveTestSteps(testTitle: string, steps: string[]) {
+    if (steps.some(step => step.includes('FAILED'))) {
+      const testName = testTitle.replace(/\s+/g, '_');
+      const testResultsDir = 'test-results';
+      await fs.mkdir(testResultsDir, { recursive: true });
+      await fs.writeFile(`${testResultsDir}/FAILED_${testName}_steps_${new Date().toISOString().split('T')[0]}.txt`, steps.join('\n'));
     }
   }
 }

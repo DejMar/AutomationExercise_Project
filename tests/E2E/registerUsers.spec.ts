@@ -4,43 +4,47 @@ import { SignUpPage } from '../../pages/SignUpPage';
 import { generateUser, User } from '../../shared/UserData';
 import { validationMessages } from '../../messages/validationMessages';
 import { userData } from '../../data/userData';
+import { TestStep } from '../../shared/TestStep';
 
 test.describe('Users manipulation positive cases', () => {
     let sharedSteps: SharedSteps;
     let signUpPage: SignUpPage;
     let newUser: User;
+    let testStep: TestStep;
 
     test.beforeEach(async ({ page }) => {
         sharedSteps = new SharedSteps(page);
         signUpPage = new SignUpPage(page);
+        testStep = new TestStep();
         await page.goto('/')
     });
 
     test.afterEach(async ({ page }) => {
         await sharedSteps.takeScreenshotOnFailure(page, { status: test.info().status ?? '', title: test.info().title });
+        await sharedSteps.saveTestSteps(test.info().title, testStep.getSteps());
     });
 
     test('TC01 Register new user', async ({ }) => {
         newUser = generateUser();
-        await signUpPage.clickLoginButton();
-        await signUpPage.signInWithCredentials(newUser.name, newUser.email);
-        await signUpPage.createNewUser(newUser);
-        await signUpPage.isSignUpSuccessful();
-        await signUpPage.clickContinueButton();
-        await signUpPage.isLogoutButtonDisplayed();
+        await testStep.log(signUpPage.clickLoginButton(), 'Click Login Button');
+        await testStep.log(signUpPage.signInWithCredentials(newUser.name, newUser.email), 'Sign In With Credentials');
+        await testStep.log(signUpPage.createNewUser(newUser), 'Create New User');
+        await testStep.log(signUpPage.isSignUpSuccessful(), 'Verify Sign Up Successful');
+        await testStep.log(signUpPage.clickContinueButton(), 'Click Continue Button');
+        await testStep.log(signUpPage.isLogoutButtonDisplayed(), 'Verify Logout Button Displayed');
     });
 
     test('TC02 Login with new user', async ({ }) => {
-        await signUpPage.clickLoginButton();
-        await signUpPage.loginWithCredentials(userData.validUsername, userData.validPassword);
-        await signUpPage.isLogoutButtonDisplayed();
+        await testStep.log(signUpPage.clickLoginButton(), 'Click Login Button');
+        await testStep.log(signUpPage.loginWithCredentials(userData.validUsername, userData.validPassword), 'Login With Credentials');
+        await testStep.log(signUpPage.isLogoutButtonDisplayed(), 'Verify Logout Button Displayed');
     });
 
     test('TC04 Logout User', async ({ }) => {
         await signUpPage.clickLoginButton();
-        await signUpPage.loginWithCredentials(userData.validUsername, userData.validPassword);
-        await signUpPage.isLogoutButtonDisplayed();
-        await signUpPage.clickLogoutButton();
+        await testStep.log(signUpPage.loginWithCredentials(userData.validUsername, userData.validPassword), 'Login With Credentials');
+        await testStep.log(signUpPage.isLogoutButtonDisplayed(), 'Verify Logout Button Displayed');
+        await testStep.log(signUpPage.clickLogoutButton(), 'Click Logout Button');
         //TODO add verification that user is logged out
     });
 });
@@ -48,30 +52,33 @@ test.describe('Users manipulation positive cases', () => {
 test.describe('Users manipulation negative cases', () => {
     let sharedSteps: SharedSteps;
     let signUpPage: SignUpPage;
-
+    let testStep: TestStep;
+    
     test.beforeEach(async ({ page }) => {
         sharedSteps = new SharedSteps(page);
         signUpPage = new SignUpPage(page);
+        testStep = new TestStep();
         await page.goto('/')
     });
 
     test.afterEach(async ({ page }) => {
         await sharedSteps.takeScreenshotOnFailure(page, { status: test.info().status ?? '', title: test.info().title });
+        await sharedSteps.saveTestSteps(test.info().title, testStep.getSteps());
     });
 
     test('TC03 Login with invalid user', async ({ }) => {
-        await signUpPage.clickLoginButton();
-        await signUpPage.loginWithCredentials(userData.validUsername, userData.invalidPassword);
-        await signUpPage.verifyErrorMessage(validationMessages.invalidLoginMessage);
+        await testStep.log(signUpPage.clickLoginButton(), 'Click Login Button');
+        await testStep.log(signUpPage.loginWithCredentials(userData.validUsername, userData.invalidPassword), 'Login With Credentials');
+        await testStep.log(signUpPage.verifyErrorMessage(validationMessages.invalidLoginMessage), 'Verify Error Message');
     });
 
     test('TC05 Register User with existing email', async ({ }) => {
-        await signUpPage.clickLoginButton();
-        await signUpPage.loginWithCredentials(userData.validUsername, userData.validPassword);
-        await signUpPage.isLogoutButtonDisplayed();
-        await signUpPage.clickLogoutButton();
-        await signUpPage.clickLoginButton();
-        await signUpPage.signInWithCredentials(userData.validName, userData.validUsername);
-        await signUpPage.verifyErrorMessage(validationMessages.emailExistsMessage);
+        await testStep.log(signUpPage.clickLoginButton(), 'Click Login Button');
+        await testStep.log(signUpPage.loginWithCredentials(userData.validUsername, userData.validPassword), 'Login With Credentials');
+        await testStep.log(signUpPage.isLogoutButtonDisplayed(), 'Verify Logout Button Displayed');
+        await testStep.log(signUpPage.clickLogoutButton(), 'Click Logout Button');
+        await testStep.log(signUpPage.clickLoginButton(), 'Click Login Button');
+        await testStep.log(signUpPage.signInWithCredentials(userData.validName, userData.validUsername), 'Sign In With Credentials');
+        await testStep.log(signUpPage.verifyErrorMessage(validationMessages.emailExistsMessage), 'Verify Error Message');
     });
 });

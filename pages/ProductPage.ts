@@ -153,4 +153,60 @@ export class ProductPage {
             await expect(titleText?.toLowerCase()).toContain(searchTerm.toLowerCase());
         }
     }
+
+    async scrollToFooter() {
+        await this.page.locator('footer').scrollIntoViewIfNeeded();
+    }
+
+    async verifySubscriptionText() {
+        await expect(this.page.locator('//*[@id="footer"]/div[1]/div/div/div[2]/div/h2')).toBeVisible();
+    }
+
+    async enterSubscriptionEmail(email: string) {
+        await this.page.fill('input#susbscribe_email', email);
+    }
+
+    async clickSubscribeButton() {
+        await this.page.click('button#subscribe.btn.btn-default');
+    }
+
+    async verifySubscriptionSuccess(expectedMessage: string) {
+        await expect(this.page.locator('div.alert-success.alert')).toHaveText(expectedMessage);
+    }
+
+    async clickCartButton() {
+        await this.page.click('a[href="/view_cart"] i.fa.fa-shopping-cart');
+    }
+
+    async verifyProductInCart(productId: number) {
+        await expect(this.page.locator(`//*[@id="cart_info"]/ul/li[${productId}]/a`)).toBeVisible();
+    }
+
+    async verifyProductPrice(productId: number) {
+        await expect(this.page.locator(`//*[@id="cart_info"]/ul/li[${productId}]/p`)).toContainText('Rs.');
+    }
+
+    async verifyProductQuantity(productId: number, quantity: string) {
+        await expect(this.page.locator(`//*[@id="cart_info"]/ul/li[${productId}]/div/div/a`)).toHaveText(quantity);
+    }
+
+    async verifyProductTotalPrice(productId: number) {
+        await expect(this.page.locator(`//*[@id="cart_info"]/ul/li[${productId}]/p`)).toContainText('Rs.');
+    }
+
+    async clickContinueShoppingButton() {
+        await this.page.click('a.btn.btn-default.checkout');
+    }
+
+    async clickViewCartButton() {
+        await this.page.click('a[href="/view_cart"] i.fa.fa-shopping-cart');
+    }
+
+    async clickAddToCartButton(productId: number) {
+        await this.page.click(`//*[@id="cart_info"]/ul/li[${productId}]/div/div/a`);
+    }
+    
+    async hoverOverProduct(productId: number) {
+        await this.page.hover(`//*[@id="cart_info"]/ul/li[${productId}]/div/div/a`);
+    }
 }

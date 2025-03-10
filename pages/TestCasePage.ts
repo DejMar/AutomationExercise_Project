@@ -66,7 +66,7 @@ export class TestCasePage {
                 fs.mkdirSync(reportDir);
             }
 
-            const reportPath = path.join(reportDir, `test-cases-mismatch-${new Date().toISOString().split('T')[0]}.json`);
+            const reportPath = path.join(reportDir, `TC07_Test-cases-mismatch-${new Date().toISOString().split('T')[0]}.json`);
             fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
 
             throw new Error(`Found ${mismatches.length} mismatches between expected and actual test cases. See report at ${reportPath}`);

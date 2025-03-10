@@ -63,7 +63,7 @@ test.describe('Product API Tests', () => {
         await fs.writeFile('test-results/responseBody.json', JSON.stringify(responseBody, null, 2));
 
         // Find brand with ID 1 and verify its name
-        const brand1 = responseBody.brands.find(brand => brand.id === 1);
+        const brand1 = responseBody.brands.find((brand: { id: number, brand: string }) => brand.id === 1);
         expect(brand1.brand).toBe('Polo');
 
         // Compare response with brands.json file
