@@ -1,0 +1,65 @@
+{
+    "responseCode": 200,
+    "testCases": [
+        {
+            "id": 1,
+            "name": "API 1: Get All Products List"
+        },
+        {
+            "id": 2,
+            "name": "API 2: POST To All Products List"
+        },
+        {
+            "id": 3,
+            "name": "API 3: Get All Brands List"
+        },
+        {
+            "id": 4,
+            "name": "API 4: PUT To All Brands List"
+        },
+        {
+            "id": 5,
+            "name": "API 5: POST To Search Product"
+        },
+        {
+            "id": 6,
+            "name": "API 6: POST To Search Product without search_product parameter"
+        },
+        {
+            "id": 7,
+            "name": "API 7: POST To Verify Login with valid details"
+        },
+        {
+            "id": 8,
+            "name": "API 8: POST To Verify Login without email parameter"
+        },
+        {
+            "id": 9,
+            "name": "API 9: DELETE To Verify Login"
+        },
+        {
+            "id": 10,
+            "name": "API 10: POST To Verify Login with invalid details"
+        },
+        {
+            "id": 11,
+            "name": "API 11: POST To Create/Register User Account"
+        },
+        {
+            "id": 12,
+            "name": "API 12: DELETE METHOD To Delete User Account"
+        },
+        {
+            "id": 13,
+            "name": "API 13: PUT METHOD To Update User Account"
+        },
+        {
+            "id": 14,
+            "name": "API 14: GET user account detail by email"
+        },
+        {
+            "id": 15,
+            "name": "Feedback for Us"
+        }
+    ]
+}

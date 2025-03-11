@@ -80,4 +80,21 @@ test.describe('Product Page Tests', () => {
         await testStep.log(productPage.verifyProductTotalPrice(1), 'Verify Product Total Price');
         await testStep.log(productPage.verifyProductTotalPrice(2), 'Verify Product Total Price');
     });
+
+    test('TC13 Verify Product quantity in Cart', async ({ page }) => {
+        await testStep.log(sharedSteps.verifyHomePageIsVisible(), 'Verify Home Page is Visible');
+        
+        // View first product details
+        await testStep.log(productPage.clickViewProductButton('1'), 'Click View Product Button');
+        await testStep.log(productPage.verifyProductDetailsPage(), 'Verify Product Detail Page');
+        
+        // Set quantity and add to cart
+        await testStep.log(productPage.setQuantity('4'), 'Set Quantity to 4');
+        await testStep.log(productPage.clickAddToCartButton(1), 'Click Add to Cart Button');
+        await testStep.log(productPage.clickViewCartButton(), 'Click View Cart Button');
+        
+        // Verify cart quantity
+        await testStep.log(productPage.verifyProductInCart(1), 'Verify Product In Cart');
+        await testStep.log(productPage.verifyProductQuantity(1, '4'), 'Verify Product Quantity is 4');
+    });
 });

@@ -209,4 +209,20 @@ export class ProductPage {
     async hoverOverProduct(productId: number) {
         await this.page.hover(`//*[@id="cart_info"]/ul/li[${productId}]/div/div/a`);
     }
+
+    async setQuantity(quantity: string) {
+        await this.page.fill(this.quantityInput, quantity);
+    }
+
+    async clickUpdateCartButton() {
+        await this.page.click('button.btn.btn-default.cart');
+    }
+
+    async verifyUpdatedQuantity(productId: number, quantity: string) {
+        await expect(this.page.locator(`//*[@id="cart_info"]/ul/li[${productId}]/div/div/a`)).toHaveText(quantity);
+    }
+
+    async verifyUpdatedTotalPrice(productId: number, totalPrice: string) {
+        await expect(this.page.locator(`//*[@id="cart_info"]/ul/li[${productId}]/p`)).toContainText(totalPrice);
+    }
 }

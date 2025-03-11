@@ -1,11 +1,13 @@
 import { Page, expect } from '@playwright/test';
 const testCasesData = require('../data/testCases.json');
+const apiTestCasesData = require('../data/testCases-API.json');
 
 export class TestCasePage {
     private page: Page;
 
     // Locators
     private testCasesButton = 'a[href="/test_cases"]';
+    private apiTestCasesButton = 'a[href="/api_list"]';
     private testCasesTitle = 'h2.title.text-center';
     private testCasesDescription = '.panel-group h5';
     private testCaseItem = '.panel-group .panel-title';
@@ -18,16 +20,20 @@ export class TestCasePage {
         await this.page.click(this.testCasesButton);
     }
 
-    async verifyTestCasesPageTitle() {
-        await expect(this.page.locator(this.testCasesTitle)).toHaveText('Test Cases');
+    async clickApiTestCasesButton() {
+        await this.page.click(this.apiTestCasesButton);
     }
 
-    async verifyTestCasesDescription() {
+    async verifyTestCasesPageTitle(testCaseTitle: string) {
+        await expect(this.page.locator(this.testCasesTitle)).toHaveText(testCaseTitle);
+    }
+
+    async verifyTestCasesDescription(testCaseDescription: string) {
         await expect(this.page.locator(this.testCasesDescription))
-            .toContainText('Below is the list of test Cases for you to practice the Automation');
+            .toContainText(testCaseDescription);
     }
-
-    async verifyTestCasesList() {
+    
+    async verifyTestCasesList(testCasesData: { testCases: { name: string }[] }, testCaseId: string, shouldThrowError = true) {
         const actualTestCases = await this.page.locator(this.testCaseItem).allTextContents();
         const expectedTestCases = testCasesData.testCases.map(tc => tc.name);
         const trimmedTestCases = actualTestCases.map(tc => tc.trim());
@@ -66,10 +72,12 @@ export class TestCasePage {
                 fs.mkdirSync(reportDir);
             }
 
-            const reportPath = path.join(reportDir, `TC07_Test-cases-mismatch-${new Date().toISOString().split('T')[0]}.json`);
+            const reportPath = path.join(reportDir, `${testCaseId}_Test-cases-mismatch-${new Date().toISOString().split('T')[0]}.json`);
             fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
 
-            throw new Error(`Found ${mismatches.length} mismatches between expected and actual test cases. See report at ${reportPath}`);
+            if (shouldThrowError) {
+                throw new Error(`Found ${mismatches.length} mismatches between expected and actual test cases. See report at ${reportPath}`);
+            }
         }
 
         // If no mismatches, verify each test case matches
