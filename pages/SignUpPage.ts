@@ -115,10 +115,10 @@ export class SignUpPage {
         await this.page.click(this.signupButton);
     }
     
-    async verifyErrorMessage(expectedMessage: string): Promise<boolean> {
+    async verifyErrorMessage(expectedMessage: string) {
         await this.errorMessage.waitFor({ state: 'visible' });
-        const messageText = await this.errorMessage.textContent();
-        return messageText === expectedMessage;
+        await expect(this.errorMessage).toHaveText(expectedMessage);
+        return true;
     }
 
     async clickLogoutButton() {

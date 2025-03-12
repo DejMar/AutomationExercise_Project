@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { Page, test } from '@playwright/test';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -79,11 +79,11 @@ export class SharedSteps {
   }
   
   async saveTestSteps(testTitle: string, steps: string[]) {
-    if (steps.some(step => step.includes('FAILED'))) {
       const testName = testTitle.replace(/\s+/g, '_');
       const testResultsDir = 'test-results';
       await fs.mkdir(testResultsDir, { recursive: true });
-      await fs.writeFile(`${testResultsDir}/FAILED_${testName}_steps_${new Date().toISOString().split('T')[0]}.txt`, steps.join('\n'));
-    }
+      const status = test.info().status === 'passed' ? 'PASSED' : 'FAILED';
+      await fs.writeFile(`${testResultsDir}/${status}_${testName}_steps_${new Date().toISOString().split('T')[0]}.txt`, steps.join('\n'));
+    
   }
 }
