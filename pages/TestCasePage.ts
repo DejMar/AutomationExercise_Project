@@ -1,6 +1,4 @@
 import { Page, expect } from '@playwright/test';
-const testCasesData = require('../data/testCases.json');
-const apiTestCasesData = require('../data/testCases-API.json');
 
 export class TestCasePage {
     private page: Page;
