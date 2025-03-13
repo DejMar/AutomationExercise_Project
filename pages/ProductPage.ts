@@ -205,9 +205,31 @@ export class ProductPage {
     async clickAddToCartButton(productId: number) {
         await this.page.click(`//*[@id="cart_info"]/ul/li[${productId}]/div/div/a`);
     }
+/*
+    async scrollAndClickFirstProduct() {
+        const firstProduct = this.page.locator('.choose > .nav > li > a').first();
+        await firstProduct.scrollIntoViewIfNeeded();
+        await this.page.locator('.overlay-content > .btn').first().click();
+    }
+
+    async scrollToFirstProduct() {
+        await this.page.locator('.choose > .nav > li > a:first-child').scrollIntoViewIfNeeded();
+    }
+  
     
+    async searchProduct(productName: string) {
+        await this.page.getByPlaceholder("Search Product").fill(productName);
+        await this.page.click('button[id="submit_search"]');
+      }
+*/
+      async addToCart(productName: string) {
+        const productSelector = `text=${productName}`;
+        await this.page.hover(productSelector);
+        await this.page.click(`a.add-to-cart`);
+      }
+
     async hoverOverProduct(productId: number) {
-        await this.page.hover(`//*[@id="cart_info"]/ul/li[${productId}]/div/div/a`);
+        await this.page.hover(`locator('.overlay-content > .btn').first()`);
     }
 
     async setQuantity(quantity: string) {

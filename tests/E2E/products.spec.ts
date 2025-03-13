@@ -3,16 +3,21 @@ import { SharedSteps } from '../../shared/SharedSteps';
 import { ProductPage } from '../../pages/ProductPage';
 import { validationMessages } from '../../messages/validationMessages';
 import { TestStep } from '../../shared/TestStep';
+import * as fs from 'fs';
+import { CartPage } from '../../pages/CartPage';
 
 test.describe('Product Page Tests', () => {
     let sharedSteps: SharedSteps;
     let productPage: ProductPage;
     let testStep: TestStep;
-
+    let cartPage: CartPage;
+    const testDataFilePath = "./data/products.json";
     test.beforeEach(async ({ page }) => {
+        //await page.setViewportSize({ width: 1920, height: 1080 });
         sharedSteps = new SharedSteps(page);
         productPage = new ProductPage(page);
         testStep = new TestStep();
+        cartPage = new CartPage(page);
         await page.goto('/');
     });
 
@@ -30,7 +35,7 @@ test.describe('Product Page Tests', () => {
         await testStep.log(productPage.verifyReviewSection(), 'Verify Review Section');
     });
 
-    test('TC09 Search Product', async ({ page }) => {
+    test.only('TC09 Search Product', async ({ page }) => {
         await testStep.log(productPage.clickProductsButton(), 'Click Products Button');
         await testStep.log(productPage.verifyAllProductsTitle(), 'Verify All Products Title');
         await testStep.log(productPage.searchProduct('blue'), 'Search Product');
@@ -56,29 +61,27 @@ test.describe('Product Page Tests', () => {
         await testStep.log(productPage.verifySubscriptionSuccess(validationMessages.subscriptionSuccessMessage), 'Verify Subscription Success');
     });
 
-    test('TC12 Add Products in Cart', async ({ page }) => {
+    test.only('TC12 Add Products in Cart', async ({ page }) => {
         //await sharedSteps.verifyHomePageIsVisible();
         await testStep.log(productPage.clickProductsButton(), 'Click Products Button');
         
         // Add first product to cart
-        await testStep.log(productPage.hoverOverProduct(1), 'Hover Over Product');
-        await testStep.log(productPage.clickAddToCartButton(1), 'Click Add to Cart Button');
-        await testStep.log(productPage.clickContinueShoppingButton(), 'Click Continue Shopping Button');
+        await testStep.log(productPage.searchProduct('Blue'), 'Search Product');
+        const products = JSON.parse(fs.readFileSync(testDataFilePath, "utf-8"));
+
+        for (const product of products.products) {
+            await productPage.searchProduct(product.name);
+            await productPage.addToCart(product.name);
+            await cartPage.clickContinueShoppingButton();
+          }
         
-        // Add second product to cart
-        await testStep.log(productPage.hoverOverProduct(2), 'Hover Over Product');
-        await testStep.log(productPage.clickAddToCartButton(2), 'Click Add to Cart Button');
-        await testStep.log(productPage.clickViewCartButton(), 'Click View Cart Button');
+          await testStep.log(cartPage.clickCartButton(), 'Click Cart Button');
         
-        // Verify cart contents
-        await testStep.log(productPage.verifyProductInCart(1), 'Verify Product In Cart');
-        await testStep.log(productPage.verifyProductInCart(2), 'Verify Product In Cart');
-        await testStep.log(productPage.verifyProductPrice(1), 'Verify Product Price');
-        await testStep.log(productPage.verifyProductPrice(2), 'Verify Product Price');
-        await testStep.log(productPage.verifyProductQuantity(1, '1'), 'Verify Product Quantity');
-        await testStep.log(productPage.verifyProductQuantity(2, '1'), 'Verify Product Quantity');
-        await testStep.log(productPage.verifyProductTotalPrice(1), 'Verify Product Total Price');
-        await testStep.log(productPage.verifyProductTotalPrice(2), 'Verify Product Total Price');
+          for (const product of products.products) {
+            await testStep.log(cartPage.verifyCartContainsText(product.name, products.expectedName), `Verify Cart Contains Product: ${product.name}`);
+          }
+          // Assert whether no added product in the Cart contains the text ‘Yellow’
+          await testStep.log(cartPage.verifyCartNotContainsText(products.UnexpectedName), 'Verify Cart Does Not Contain Unexpected Product');
     });
 
     test('TC13 Verify Product quantity in Cart', async ({ page }) => {

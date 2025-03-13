@@ -84,6 +84,5 @@ export class SharedSteps {
       await fs.mkdir(testResultsDir, { recursive: true });
       const status = test.info().status === 'passed' ? 'PASSED' : 'FAILED';
       await fs.writeFile(`${testResultsDir}/${status}_${testName}_steps_${new Date().toISOString().split('T')[0]}.txt`, steps.join('\n'));
-    
   }
 }
