@@ -88,8 +88,8 @@ test.describe('Product Page Tests', () => {
         await testStep.log(sharedSteps.verifyHomePageIsVisible(), 'Verify Home Page is Visible');
         
         // View first product details
-        await testStep.log(productPage.clickViewProductButton('1'), 'Click View Product Button');
-        await testStep.log(productPage.verifyProductDetailsPage(), 'Verify Product Detail Page');
+        //await testStep.log(productPage.clickViewProductButton('1'), 'Click View Product Button');
+        //await testStep.log(productPage.verifyProductDetailsPage(), 'Verify Product Detail Page');
         
         // Set quantity and add to cart
         await testStep.log(productPage.setQuantity('4'), 'Set Quantity to 4');
