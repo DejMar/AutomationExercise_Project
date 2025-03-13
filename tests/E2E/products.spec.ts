@@ -74,7 +74,7 @@ test.describe('Product Page Tests', () => {
             await productPage.addToCart(product.name);
             await cartPage.clickContinueShoppingButton();
           }
-        
+          
           await testStep.log(cartPage.clickCartButton(), 'Click Cart Button');
         
           for (const product of products.products) {
