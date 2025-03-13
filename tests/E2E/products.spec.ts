@@ -35,14 +35,14 @@ test.describe('Product Page Tests', () => {
         await testStep.log(productPage.verifyReviewSection(), 'Verify Review Section');
     });
 
-    test.only('TC09 Search Product', async ({ page }) => {
+    test.only('TC09 Search Product', async ({ }) => {
         await testStep.log(productPage.clickProductsButton(), 'Click Products Button');
         await testStep.log(productPage.verifyAllProductsTitle(), 'Verify All Products Title');
         await testStep.log(productPage.searchProduct('blue'), 'Search Product');
         await testStep.log(productPage.verifySearchResults('blue'), 'Verify Search Results');
     });
 
-    test('TC10 Verify Subscription in home page', async ({ page }) => {
+    test('TC10 Verify Subscription in home page', async ({ }) => {
         //await sharedSteps.verifyHomePageIsVisible();
         await productPage.scrollToFooter();
         await testStep.log(productPage.verifySubscriptionText(), 'Verify Subscription Text');
@@ -74,7 +74,7 @@ test.describe('Product Page Tests', () => {
             await productPage.addToCart(product.name);
             await cartPage.clickContinueShoppingButton();
           }
-          
+
           await testStep.log(cartPage.clickCartButton(), 'Click Cart Button');
         
           for (const product of products.products) {
