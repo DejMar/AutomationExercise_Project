@@ -63,8 +63,6 @@ The project uses Playwright's built-in test runner and supports:
 - Multiple browser testing (Chrome, Firefox, Safari)
 - Configurable base URL and timeouts
 - Screenshot and trace capture
-- HTML report generation
-- CI/CD integration readiness
 
 ## Test Execution
 Tests can be run in parallel with retry capability on failures. The framework includes:
