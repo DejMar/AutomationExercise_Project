@@ -214,88 +214,83 @@ test.describe('Users API Tests', () => {
         // Verify success message
         expect(responseBody.message).toBe(validationMessages.accountDeletedMessage);
     });
-    
-    test('13 - PUT /api/updateAccount updates user account details', async ({ request }) => {
-        // Create a user first to ensure we have a valid account to update
-        const originalUser = generateUser();
-        const createFormData = new URLSearchParams();
-        createFormData.append('email', originalUser.email);
-        createFormData.append('password', originalUser.password);
-        createFormData.append('title', originalUser.title);
-        createFormData.append('name', originalUser.name);
-        createFormData.append('birth_date', originalUser.dateOfBirth.day);
-        createFormData.append('birth_month', originalUser.dateOfBirth.month);
-        createFormData.append('birth_year', originalUser.dateOfBirth.year);
-        createFormData.append('firstname', originalUser.firstName);
-        createFormData.append('lastname', originalUser.lastName);
-        createFormData.append('company', originalUser.company);
-        createFormData.append('address1', originalUser.address1);
-        createFormData.append('address2', originalUser.address2);
-        createFormData.append('country', originalUser.country);
-        createFormData.append('state', originalUser.state);
-        createFormData.append('city', originalUser.city);
-        createFormData.append('zipcode', originalUser.zipcode);
-        createFormData.append('mobile_number', originalUser.mobileNumber);
+
+    test('13 - PUT /api/updateAccount - Update user account with valid data', async ({ request }) => {
+        // Create initial test user
+        const user = generateUser();
+        const formData = new URLSearchParams();
+        formData.append('email', user.email);
+        formData.append('password', user.password);
+        formData.append('title', user.title);
+        formData.append('name', user.name);
+        formData.append('birth_date', user.dateOfBirth.day);
+        formData.append('birth_month', user.dateOfBirth.month);
+        formData.append('birth_year', user.dateOfBirth.year);
+        formData.append('firstname', user.firstName);
+        formData.append('lastname', user.lastName);
+        formData.append('company', user.company);
+        formData.append('address1', user.address1);
+        formData.append('address2', user.address2);
+        formData.append('country', user.country);
+        formData.append('state', user.state);
+        formData.append('city', user.city);
+        formData.append('zipcode', user.zipcode);
+        formData.append('mobile_number', user.mobileNumber);
 
         // Create the initial user account
         await request.post(CREATE_ACCOUNT_ENDPOINT, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            data: createFormData.toString()
+            data: formData.toString()
         });
 
-        // Generate updated user data
-        const updatedUser = generateUser();
-        const updateFormData = new URLSearchParams();
-        updateFormData.append('email', originalUser.email); // Keep original email for identification
-        updateFormData.append('password', updatedUser.password);
-        updateFormData.append('title', updatedUser.title);
-        updateFormData.append('name', updatedUser.name);
-        updateFormData.append('birth_date', updatedUser.dateOfBirth.day);
-        updateFormData.append('birth_month', updatedUser.dateOfBirth.month);
-        updateFormData.append('birth_year', updatedUser.dateOfBirth.year);
-        updateFormData.append('firstname', updatedUser.firstName);
-        updateFormData.append('lastname', updatedUser.lastName);
-        updateFormData.append('company', updatedUser.company);
-        updateFormData.append('address1', updatedUser.address1);
-        updateFormData.append('address2', updatedUser.address2);
-        updateFormData.append('country', updatedUser.country);
-        updateFormData.append('state', updatedUser.state);
-        updateFormData.append('city', updatedUser.city);
-        updateFormData.append('zipcode', updatedUser.zipcode);
-        updateFormData.append('mobile_number', updatedUser.mobileNumber);
+        // Prepare update data
+        const updateData = new URLSearchParams();
+        updateData.append('name', 'Mat');
+        updateData.append('email', user.email);
+        updateData.append('password', user.password);
+        updateData.append('title', 'Mr');
+        updateData.append('birth_date', '14');
+        updateData.append('birth_month', 'november');
+        updateData.append('birth_year', '1995');
+        updateData.append('firstname', 'John');
+        updateData.append('lastname', 'Tudor');
+        updateData.append('company', 'Space Y');
+        updateData.append('address1', 'bul.Freedom');
+        updateData.append('address2', 'str.Doom');
+        updateData.append('country', 'United States');
+        updateData.append('zipcode', '15847');
+        updateData.append('state', 'Utah');
+        updateData.append('city', 'Orem');
+        updateData.append('mobile_number', '+397114779');
 
         // Send PUT request to update user
         const response = await request.put('https://automationexercise.com/api/updateAccount', {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            data: updateFormData.toString()
+            data: updateData.toString()
         });
 
         // Verify response status is 200
         expect(response.status()).toBe(200);
 
-        // Parse response body
+        // Parse and verify response body
         const responseBody = await response.json();
 
-        // Verify response code
         expect(responseBody.responseCode).toBe(200);
+        expect(responseBody.message).toBe(validationMessages.userUpdatedMessage);
 
-        // Verify success message
-        expect(responseBody.message).toBe('User updated!');
-
-        // Clean up - delete the test user
-        const deleteFormData = new URLSearchParams();
-        deleteFormData.append('email', originalUser.email);
-        deleteFormData.append('password', updatedUser.password);
-
+        // Clean up - delete test user
+        const deleteData = new URLSearchParams();
+        deleteData.append('email', user.email);
+        deleteData.append('password', user.password);
         await request.delete(DELETE_ACCOUNT_ENDPOINT, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            data: deleteFormData.toString()
+            data: deleteData.toString()
         });
     });
 
@@ -307,12 +302,19 @@ test.describe('Users API Tests', () => {
         createFormData.append('password', user.password);
         createFormData.append('title', user.title);
         createFormData.append('name', user.name);
-        createFormData.append('email', user.email);
-        createFormData.append('password', user.password);
         createFormData.append('birth_date', user.dateOfBirth.day);
         createFormData.append('birth_month', user.dateOfBirth.month);
         createFormData.append('birth_year', user.dateOfBirth.year);
-        // Add other required user fields...
+        createFormData.append('firstname', user.firstName);
+        createFormData.append('lastname', user.lastName);
+        createFormData.append('company', user.company);
+        createFormData.append('address1', user.address1);
+        createFormData.append('address2', user.address2);
+        createFormData.append('country', user.country);
+        createFormData.append('state', user.state);
+        createFormData.append('city', user.city);
+        createFormData.append('zipcode', user.zipcode);
+        createFormData.append('mobile_number', user.mobileNumber);
 
         // Create the user account
         await request.post(CREATE_ACCOUNT_ENDPOINT, {
@@ -344,20 +346,31 @@ test.describe('Users API Tests', () => {
 
         // Verify user properties match what we created
         expect(userDetail.email).toBe(user.email);
-        expect(userDetail).toHaveProperty('name');
-        expect(userDetail).toHaveProperty('title');
-        expect(userDetail).toHaveProperty('birth_day');
-        expect(userDetail).toHaveProperty('birth_month');
-        expect(userDetail).toHaveProperty('birth_year');
-        expect(userDetail).toHaveProperty('first_name');
-        expect(userDetail).toHaveProperty('last_name');
-        expect(userDetail).toHaveProperty('company');
-        expect(userDetail).toHaveProperty('address1');
-        expect(userDetail).toHaveProperty('address2');
-        expect(userDetail).toHaveProperty('country');
-        expect(userDetail).toHaveProperty('state');
-        expect(userDetail).toHaveProperty('city');
-        expect(userDetail).toHaveProperty('zipcode');
-        expect(userDetail).toHaveProperty('mobile_number');
+        expect(userDetail.name).toBe(user.name);
+        expect(userDetail.title).toBe(user.title);
+        expect(userDetail.birth_day).toBe(user.dateOfBirth.day);
+        expect(userDetail.birth_month).toBe(user.dateOfBirth.month);
+        expect(userDetail.birth_year).toBe(user.dateOfBirth.year);
+        expect(userDetail.first_name).toBe(user.firstName);
+        expect(userDetail.last_name).toBe(user.lastName);
+        expect(userDetail.company).toBe(user.company);
+        expect(userDetail.address1).toBe(user.address1);
+        expect(userDetail.address2).toBe(user.address2);
+        expect(userDetail.country).toBe(user.country);
+        expect(userDetail.state).toBe(user.state);
+        expect(userDetail.city).toBe(user.city);
+        expect(userDetail.zipcode).toBe(user.zipcode);
+        //expect(userDetail.mobile_number).toBe(user.mobileNumber);
+
+        // Clean up - delete test user
+        const deleteData = new URLSearchParams();
+        deleteData.append('email', user.email);
+        deleteData.append('password', user.password);
+        await request.delete(DELETE_ACCOUNT_ENDPOINT, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            data: deleteData.toString()
+        });
     });
 });

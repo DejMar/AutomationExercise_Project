@@ -4,23 +4,16 @@ import { pageTitles } from '../messages/pageTitles';
 export class ProductPage {
     private page: Page;
 
-    // Locators
+    //#region Locators
     private productsButton = '//a[@href="/products"]';
     private productTitle = '.product-title';
-    private productPrice = '.product-price';
-    //private addToCartButton = 'button[data-testid="add-to-cart"]';
-    //private quantityInput = 'input[data-testid="quantity-input"]';
-    private productDescription = '.product-description';
-    private reviewsSection = '#reviews';
     private titleLocator = 'h2.title.text-center';
-
     private productCard = '.col-sm-4';
     private productInfo = '.productinfo';
     //private productImage = '.productinfo img';
     private productName = '.productinfo p';
     private productPriceInfo = '.productinfo h2';
     private productPriceHeading = 'h2:has-text("Rs.")';
-    
     private viewProductButton = (productId: string) => `a[href="/product_details/${productId}"]`;
 
     // Modal locators
@@ -48,57 +41,31 @@ export class ProductPage {
     private emailInput = '#email';
     private reviewTextarea = '#review';
     private submitReviewButton = '#button-review';
-    private reviewSuccessMessage = '#review-section .alert-success';
-
     private searchInput = '#search_product';
     private submitSearchButton = '#submit_search';
     private searchedProductTitle = '.features_items .productinfo p';
+    private footerLocator = 'footer';
+    private subscriptionEmailInput = 'input#susbscribe_email';
+    private subscriptionTextLocator = '//*[@id="footer"]/div[1]/div/div/div[2]/div/h2';
+    private subscribeButtonLocator = 'button#subscribe.btn.btn-default';
+    private subscriptionSuccessLocator = 'div.alert-success.alert';
+    private cartButtonLocator = 'a[href="/view_cart"] i.fa.fa-shopping-cart';
+    private addToCartButtonLocator = 'a.add-to-cart';
+    private inputQuantity = 'input#quantity';
+
+    //#endregion
 
     constructor(page: Page) {
         this.page = page;
     }
 
-    // Methods
+    //#region Methods
     async clickProductsButton() {
         await this.page.click(this.productsButton);
     }
 
     async verifyAllProductsTitle() {
         await expect(this.page.locator(this.titleLocator)).toHaveText(pageTitles.AllProduct);
-    }
-
-    async navigateTo(productId: string) {
-        await this.page.goto(`/product/${productId}`);
-    }
-
-    async getProductTitle(): Promise<string> {
-        return (await this.page.textContent(this.productTitle)) || '';
-    }
-
-    async verifyProductsAreDisplayed() {
-        // Wait for at least one product card to be visible
-        await this.page.waitForSelector(this.productCard);
-
-        // Get all product cards
-        const products = await this.page.locator(this.productCard).all();
-
-        // Verify at least one product exists
-        expect(products.length).toBeGreaterThan(0);
-
-        // Verify first product has all required elements
-        const firstProduct = products[0];
-        
-        // Add explicit waits for elements to be visible
-        await this.page.waitForSelector(this.productInfo, { state: 'visible', timeout: 10000 });
-        await this.page.waitForSelector(this.productImage, { state: 'visible', timeout: 10000 });
-        await this.page.waitForSelector(this.productName, { state: 'visible', timeout: 10000 });
-        await this.page.waitForSelector(this.productPriceInfo, { state: 'visible', timeout: 10000 });
-
-        // Now verify they are visible
-        await expect(firstProduct.locator(this.productInfo)).toBeVisible();
-        await expect(firstProduct.locator(this.productImage)).toBeVisible(); 
-        await expect(firstProduct.locator(this.productName)).toBeVisible();
-        await expect(firstProduct.locator(this.productPriceHeading)).toBeVisible();
     }
 
     async clickViewProductButton(productId: string) {
@@ -119,14 +86,6 @@ export class ProductPage {
         await expect(this.page.locator(this.availabilityText)).toContainText('Availability');
         await expect(this.page.locator(this.conditionText)).toContainText('Condition');
         await expect(this.page.locator(this.brandText)).toContainText('Brand');
-    }
-
-    async verifyCartModal() {
-        await expect(this.page.locator(this.cartModal)).toBeVisible();
-        await expect(this.page.locator(this.modalTitle)).toHaveText('Added!');
-        await expect(this.page.locator(this.modalBody)).toContainText('Your product has been added to cart');
-        await expect(this.page.locator(this.viewCartLink)).toBeVisible();
-        await expect(this.page.locator(this.continueShoppingBtn)).toBeVisible();
     }
 
     async verifyReviewSection() {
@@ -155,96 +114,49 @@ export class ProductPage {
     }
 
     async scrollToFooter() {
-        await this.page.locator('footer').scrollIntoViewIfNeeded();
+        await this.page.locator(this.footerLocator).scrollIntoViewIfNeeded();
     }
 
     async verifySubscriptionText() {
-        await expect(this.page.locator('//*[@id="footer"]/div[1]/div/div/div[2]/div/h2')).toBeVisible();
+        await expect(this.page.locator(this.subscriptionTextLocator)).toBeVisible();
     }
 
     async enterSubscriptionEmail(email: string) {
-        await this.page.fill('input#susbscribe_email', email);
+        await this.page.fill(this.subscriptionEmailInput, email);
     }
 
     async clickSubscribeButton() {
-        await this.page.click('button#subscribe.btn.btn-default');
+        await this.page.click(this.subscribeButtonLocator);
     }
 
     async verifySubscriptionSuccess(expectedMessage: string) {
-        await expect(this.page.locator('div.alert-success.alert')).toHaveText(expectedMessage);
+        await expect(this.page.locator(this.subscriptionSuccessLocator)).toHaveText(expectedMessage);
     }
 
     async clickCartButton() {
-        await this.page.click('a[href="/view_cart"] i.fa.fa-shopping-cart');
+        await this.page.click(this.cartButtonLocator);
     }
 
-    async verifyProductInCart(productId: number) {
-        await expect(this.page.locator(`//*[@id="cart_info"]/ul/li[${productId}]/a`)).toBeVisible();
-    }
-
-    async verifyProductPrice(productId: number) {
-        await expect(this.page.locator(`//*[@id="cart_info"]/ul/li[${productId}]/p`)).toContainText('Rs.');
-    }
-
-    async verifyProductQuantity(productId: number, quantity: string) {
-        await expect(this.page.locator(`//*[@id="cart_info"]/ul/li[${productId}]/div/div/a`)).toHaveText(quantity);
-    }
-
-    async verifyProductTotalPrice(productId: number) {
-        await expect(this.page.locator(`//*[@id="cart_info"]/ul/li[${productId}]/p`)).toContainText('Rs.');
-    }
-
-    async clickContinueShoppingButton() {
-        await this.page.click('a.btn.btn-default.checkout');
-    }
-
-    async clickViewCartButton() {
-        await this.page.click('a[href="/view_cart"] i.fa.fa-shopping-cart');
-    }
-
-    async clickAddToCartButton(productId: number) {
-        await this.page.click(`//*[@id="cart_info"]/ul/li[${productId}]/div/div/a`);
-    }
-/*
-    async scrollAndClickFirstProduct() {
-        const firstProduct = this.page.locator('.choose > .nav > li > a').first();
-        await firstProduct.scrollIntoViewIfNeeded();
-        await this.page.locator('.overlay-content > .btn').first().click();
-    }
-
-    async scrollToFirstProduct() {
-        await this.page.locator('.choose > .nav > li > a:first-child').scrollIntoViewIfNeeded();
-    }
-  
-    
-    async searchProduct(productName: string) {
-        await this.page.getByPlaceholder("Search Product").fill(productName);
-        await this.page.click('button[id="submit_search"]');
-      }
-*/
-      async addToCart(productName: string) {
+    async addToCart(productName: string) {
         const productSelector = `text=${productName}`;
         await this.page.hover(productSelector);
-        await this.page.click(`a.add-to-cart`);
-      }
-
-    async hoverOverProduct(productId: number) {
-        await this.page.hover(`locator('.overlay-content > .btn').first()`);
+        await this.page.click(this.addToCartButtonLocator);
     }
 
-    async setQuantity(quantity: string) {
-        await this.page.fill(this.quantityInput, quantity);
+    async increaseQuantity(amount: number) {
+        const quantityInput = this.page.locator(this.inputQuantity);
+        const currentValue = await quantityInput.inputValue();
+        const newValue = parseInt(currentValue) + amount;
+        await quantityInput.fill(newValue.toString());
+        await expect(quantityInput).toHaveValue(newValue.toString());
     }
 
-    async clickUpdateCartButton() {
-        await this.page.click('button.btn.btn-default.cart');
+    async decreaseQuantity(amount: number) {
+        const quantityInput = this.page.locator(this.inputQuantity);
+        const currentValue = await quantityInput.inputValue();
+        const newValue = Math.max(1, parseInt(currentValue) - amount); // Prevent going below min=1
+        await quantityInput.fill(newValue.toString());
+        await expect(quantityInput).toHaveValue(newValue.toString());
     }
-
-    async verifyUpdatedQuantity(productId: number, quantity: string) {
-        await expect(this.page.locator(`//*[@id="cart_info"]/ul/li[${productId}]/div/div/a`)).toHaveText(quantity);
-    }
-
-    async verifyUpdatedTotalPrice(productId: number, totalPrice: string) {
-        await expect(this.page.locator(`//*[@id="cart_info"]/ul/li[${productId}]/p`)).toContainText(totalPrice);
-    }
+    //#endregion
 }
