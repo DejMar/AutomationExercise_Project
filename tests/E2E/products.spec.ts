@@ -152,5 +152,6 @@ test.describe('Product Page Tests', () => {
         await testStep.log(signupPage.clickContinueButton(), 'Click Final Continue Button');
         */
     });
+    
 
 });

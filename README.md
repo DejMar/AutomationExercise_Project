@@ -54,7 +54,6 @@ The test suite provides comprehensive test coverage for an e-commerce website, i
 ### Testing Framework
 - Playwright for browser automation
 - TypeScript for type-safe code
-- HTML reporter for test results
 - Parallel test execution capability
 - Cross-browser testing support
 
@@ -71,3 +70,31 @@ Tests can be run in parallel with retry capability on failures. The framework in
 - Detailed test step reporting
 - Environment-specific configurations
 
+
+## API Testing
+The test suite includes comprehensive API testing to validate backend functionality:
+
+### API Test Coverage
+- Authentication endpoints for login/signup
+- Product catalog and search APIs 
+- Cart and order management endpoints
+- User profile and account operations
+
+### API Testing Approach
+- Request validation for different HTTP methods (GET, POST, PUT, DELETE)
+- Response schema validation
+- Error handling and edge cases
+- Authentication token management
+- Data consistency checks
+
+### Key API Test Features
+- **Automated Assertions**: Validates response codes, headers and payloads
+- **Data Driven Testing**: Uses test data files for different scenarios
+- **Integration Tests**: Validates API integrations and data flow
+- **Performance Checks**: Basic response time validation
+
+### API Test Implementation
+- Uses Playwright's API testing capabilities
+- Custom request helpers and utilities
+- Shared test data and configurations
+- Detailed API test reportings

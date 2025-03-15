@@ -16,7 +16,7 @@ export class CartPage {
         expect(cartItemText).toContain(expectedText);
     }
 
-    async verifyCartNotContainsText(unexpectedText) {
+    async verifyCartNotContainsText(unexpectedText: string) {
         const productRows = await this.page.$$("tbody tr");
 
         for (const row of productRows) {
