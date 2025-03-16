@@ -7,12 +7,15 @@ export class TestStep {
 
     async log<T>(step: Promise<T> | T, description: string): Promise<T> {
         try {
-            const resolvedStep = await Promise.resolve(step);
+            const resolvedStep = await Promise.race([
+                Promise.resolve(step),
+                new Promise<T>((_, reject) => setTimeout(() => reject(new Error('Timeout')), 5000))
+            ]);
             const status = 'PASSED';
             this.steps.push(`${description} - ${status}`);
             return resolvedStep;
         } catch (error) {
-            const status = 'FAILED';
+            const status = `FAILED: ${error.message}`;
             this.steps.push(`${description} - ${status}`);
             throw error;
         }

@@ -46,10 +46,6 @@ export class SignUpPage {
     }
 
     // Methods
-    async navigateTo() {
-        await this.page.goto('/signup');
-    }
-
     async clickLoginButton() {
         await this.page.click(this.loginSignInButton);
     }
@@ -80,7 +76,7 @@ export class SignUpPage {
         await this.page.click(this.createAccountButton);
     }
 
-    async createNewUser(user: User) {
+    async fillSignUpFormAndCreateAccount(user: User) {
         await this.fillSignUpForm(user);
         await this.clickCreateAccountButton();
     }
