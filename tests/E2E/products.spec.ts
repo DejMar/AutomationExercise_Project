@@ -19,7 +19,7 @@ test.describe('Product Page Tests', () => {
         productPage = new ProductPage(page);
         testStep = new TestStep();
         cartPage = new CartPage(page);
-        await page.goto('/');
+        await testStep.log(page.goto('/'), 'Navigate to Homepage');
     });
 
     test.afterEach(async ({ page }) => {
@@ -27,7 +27,7 @@ test.describe('Product Page Tests', () => {
         await sharedSteps.saveTestSteps(test.info().title, testStep.getSteps());
     });
 
-    test('TC08 Verify All Products and product detail page', async ({ page }) => {
+    test('TC08 Verify All Products and product detail page', async ({ }) => {
         await testStep.log(productPage.clickProductsButton(), 'Click Products Button');
         await testStep.log(productPage.verifyAllProductsTitle(), 'Verify All Products Title');
         await testStep.log(productPage.clickViewProductButton('1'), 'Click View Product Button');
@@ -50,7 +50,7 @@ test.describe('Product Page Tests', () => {
         await testStep.log(productPage.verifySubscriptionSuccess(validationMessages.subscriptionSuccessMessage), 'Verify Subscription Success');
     });
 
-    test('TC11 Verify Subscription in Cart page', async ({ page }) => {
+    test('TC11 Verify Subscription in Cart page', async ({ }) => {
         await testStep.log(productPage.clickCartButton(), 'Click Cart Button');
         await testStep.log(productPage.scrollToFooter(), 'Scroll to Footer');
         await testStep.log(productPage.verifySubscriptionText(), 'Verify Subscription Text');

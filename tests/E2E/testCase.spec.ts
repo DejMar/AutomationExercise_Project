@@ -15,7 +15,7 @@ test.describe('Test Cases Page Tests', () => {
         sharedSteps = new SharedSteps(page);
         testCasePage = new TestCasePage(page);
         testStep = new TestStep();
-        await page.goto('/');
+        await testStep.log(page.goto('/'), 'Navigate to Homepage');
     });
 
     test.afterEach(async ({ page }) => {
@@ -34,6 +34,13 @@ test.describe('Test Cases Page Tests', () => {
         await testStep.log(testCasePage.clickApiTestCasesButton(), 'Click API Test Cases Button');
         await testStep.log(testCasePage.verifyTestCasesPageTitle(testCasePageTitles.ApiTestCases), 'Verify Test Cases Page Title');
         await testStep.log(testCasePage.verifyTestCasesDescription(testCasePageTitles.ApiTestCasesDescription), 'Verify Test Cases Description');
-        await testStep.log(testCasePage.verifyTestCasesList(apiTestCasesData, 'TC07.2'), 'Verify Test Cases List');
+        await testStep.log(testCasePage.verifyTestCasesList(apiTestCasesData, 'TC07.2'), 'Verify API Test Cases List');
+    });
+
+    test('TC07.3 Verify API Test Cases Page', async ({ }) => {
+        await testStep.log(testCasePage.clickApiTestCasesButton(), 'Click API Test Cases Button');
+        await testStep.log(testCasePage.verifyTestCasesPageTitle(testCasePageTitles.ApiTestCases), 'Verify Test Cases Page Title');
+        await testStep.log(testCasePage.verifyTestCasesDescription(testCasePageTitles.ApiTestCasesDescription), 'Verify Test Cases Description');
+        await testStep.log(testCasePage.verifyTestCasesList(testCasesData, 'TC07.3'), 'Verify API Test Cases List');
     });
 });

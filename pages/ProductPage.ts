@@ -6,22 +6,8 @@ export class ProductPage {
 
     //#region Locators
     private productsButton = '//a[@href="/products"]';
-    private productTitle = '.product-title';
     private titleLocator = 'h2.title.text-center';
-    private productCard = '.col-sm-4';
-    private productInfo = '.productinfo';
-    //private productImage = '.productinfo img';
-    private productName = '.productinfo p';
-    private productPriceInfo = '.productinfo h2';
-    private productPriceHeading = 'h2:has-text("Rs.")';
     private viewProductButton = (productId: string) => `a[href="/product_details/${productId}"]`;
-
-    // Modal locators
-    private cartModal = '#cartModal';
-    private modalTitle = '.modal-title';
-    private modalBody = '.modal-body';
-    private viewCartLink = '.modal-body a[href="/view_cart"]';
-    private continueShoppingBtn = '.close-modal';
 
     // Product details locators 
     private productImage = '.view-product img';

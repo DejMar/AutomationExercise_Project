@@ -13,7 +13,7 @@ test.describe('Contact Us Form Tests', () => {
         sharedSteps = new SharedSteps(page);
         contactUsPage = new ContactUsPage(page);
         testStep = new TestStep();
-        await page.goto('/');
+        await testStep.log(page.goto('/'), 'Navigate to Homepage');
     });
 
     test.afterEach(async ({ page }) => {

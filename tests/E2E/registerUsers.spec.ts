@@ -16,7 +16,7 @@ test.describe('Users manipulation positive cases', () => {
         sharedSteps = new SharedSteps(page);
         signUpPage = new SignUpPage(page);
         testStep = new TestStep();
-        await page.goto('/')
+        await testStep.log(page.goto('/'), 'Navigate to Homepage');
     });
 
     test.afterEach(async ({ page }) => {
@@ -58,7 +58,7 @@ test.describe('Users manipulation negative cases', () => {
         sharedSteps = new SharedSteps(page);
         signUpPage = new SignUpPage(page);
         testStep = new TestStep();
-        await page.goto('/')
+        await testStep.log(page.goto('/'), 'Navigate to Homepage');
     });
 
     test.afterEach(async ({ page }) => {
@@ -78,7 +78,7 @@ test.describe('Users manipulation negative cases', () => {
         await testStep.log(signUpPage.isLogoutButtonDisplayed(), 'Verify Logout Button Displayed');
         await testStep.log(signUpPage.clickLogoutButton(), 'Click Logout Button');
         await testStep.log(signUpPage.clickLoginButton(), 'Click Login Button');
-        await testStep.log(signUpPage.signInWithCredentials(userData.validName, userData.validUsername), 'Sign In With Credentials');
+        await testStep.log(signUpPage.signInWithCredentials(userData.validName, userData.validUsername), 'Sign In With Same Credentials');
         await testStep.log(signUpPage.verifyErrorMessage(validationMessages.emailExistsMessage), 'Verify Error Message');
     });
 });
