@@ -89,13 +89,19 @@ export class ProductPage {
     }
     
     async verifySearchResults(searchTerm: string) {
-        // Get all product titles
-        const productTitles = await this.page.locator(this.searchedProductTitle).all();
-        
-        // Verify each product title contains the search term
-        for (const title of productTitles) {
-            const titleText = await title.textContent();
-            await expect(titleText?.toLowerCase()).toContain(searchTerm.toLowerCase());
+        try {
+            // Get all product titles
+            const productTitles = await this.page.locator(this.searchedProductTitle).all();
+            
+            // Verify each product title contains the search term
+            for (const title of productTitles) {
+                const titleText = await title.textContent();
+                if (!titleText?.toLowerCase().includes(searchTerm.toLowerCase())) {
+                    throw new Error(`Expected title to contain: ${searchTerm.toLowerCase()}, but received: ${titleText?.toLowerCase()}`);
+                }
+            }
+        } catch (error) {
+            throw new Error(`Error verifying search results: ${error.message}`);
         }
     }
 

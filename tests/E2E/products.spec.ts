@@ -3,8 +3,8 @@ import { SharedSteps } from '../../shared/SharedSteps';
 import { ProductPage } from '../../pages/ProductPage';
 import { validationMessages } from '../../messages/validationMessages';
 import { TestStep } from '../../shared/TestStep';
-import * as fs from 'fs';
 import { CartPage } from '../../pages/CartPage';
+import * as fs from 'fs';
 
 test.describe('Product Page Tests', () => {
     let sharedSteps: SharedSteps;
