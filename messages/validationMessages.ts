@@ -8,6 +8,7 @@ export const validationMessages = {
     methodNotSupportedMessage: 'This request method is not supported.',
     userCreatedMessage: 'User created!',
     userUpdatedMessage: 'User updated!',
+    userExistsMessage: 'User exists!',
     accountDeletedMessage: 'Account deleted!',
     subscriptionSuccessMessage: 'You have been successfully subscribed!'
 }

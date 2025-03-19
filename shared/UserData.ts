@@ -52,3 +52,14 @@ export function generateUser(): User {
     mobileNumber: faker.phone.number(),
   };
 }
+
+export function generateCreditCardDetails() {
+  return {
+    nameOnCard: faker.person.fullName(),
+    cardNumber: faker.finance.creditCardNumber(),
+    cvc: faker.finance.creditCardCVV(),
+    expiryMonth: String(faker.number.int({ min: 1, max: 12 })),
+    expiryYear: String(faker.number.int({ min: 2024, max: 2030 }))
+  };
+}
+

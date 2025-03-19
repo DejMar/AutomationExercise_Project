@@ -58,5 +58,13 @@ export class CartPage {
 
     async clickCartButton() {
         await this.page.click("text=Cart");
+    }s
+
+    async clickProceedToCheckoutButton() {
+        await this.page.click("text=Proceed To Checkout");
+    }
+
+    async clickRegisterLoginButton() {
+        await this.page.getByRole('link', { name: 'Register / Login' }).click();
     }
 }

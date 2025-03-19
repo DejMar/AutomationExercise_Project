@@ -1,16 +1,19 @@
 import { test } from '@playwright/test';
 import { SharedSteps } from '../../shared/SharedSteps';
 import { ProductPage } from '../../pages/ProductPage';
+import { SignUpPage } from '../../pages/SignUpPage';
 import { validationMessages } from '../../messages/validationMessages';
 import { TestStep } from '../../shared/TestStep';
 import { CartPage } from '../../pages/CartPage';
 import * as fs from 'fs';
+import { generateCreditCardDetails, generateUser } from '../../shared/UserData';
 
 test.describe('Product Page Tests', () => {
     let sharedSteps: SharedSteps;
     let productPage: ProductPage;
     let testStep: TestStep;
     let cartPage: CartPage;
+    let signUpPage: SignUpPage;
     const testDataFilePath = './data/products.json';
     const products = JSON.parse(fs.readFileSync(testDataFilePath, 'utf-8'));
 
@@ -19,6 +22,7 @@ test.describe('Product Page Tests', () => {
         productPage = new ProductPage(page);
         testStep = new TestStep();
         cartPage = new CartPage(page);
+        signUpPage = new SignUpPage(page);
         await testStep.log(page.goto('/'), 'Navigate to Homepage');
     });
 
@@ -63,9 +67,9 @@ test.describe('Product Page Tests', () => {
         await testStep.log(productPage.clickProductsButton(), 'Click Products Button');
 
         for (const product of products.products) {
-            await productPage.searchProduct(product.name);
-            await productPage.addToCart(product.name);
-            await cartPage.clickContinueShoppingButton();
+            await testStep.log(productPage.searchProduct(product.name), `Search Product: ${product.name}`);
+            await testStep.log(productPage.addToCart(product.name), `Add Product to Cart: ${product.name}`);
+            await testStep.log(cartPage.clickContinueShoppingButton(), 'Click Continue Shopping Button');
         }
 
         await testStep.log(cartPage.clickCartButton(), 'Click Cart Button');
@@ -87,52 +91,35 @@ test.describe('Product Page Tests', () => {
         await testStep.log(productPage.decreaseQuantity(decreaseQuantity), `Decrease Quantity by ${decreaseQuantity}`);
     });
 
-    test('TC14 Place Order: Register while Checkout', async ({ page }) => {
-      /*  const user = generateUser();
-        const cardDetails = {
-            nameOnCard: faker.person.fullName(),
-            cardNumber: faker.finance.creditCardNumber(),
-            cvc: faker.finance.creditCardCVV(),
-            expiryMonth: String(faker.number.int({ min: 1, max: 12 })),
-            expiryYear: String(faker.number.int({ min: 2024, max: 2030 }))
-        };
+    test.only('TC14 Place Order: Register while Checkout', async ({ page }) => {
+       const user = generateUser();
+       //const cardDetails = generateCreditCardDetails();
+       
+       await testStep.log(productPage.clickProductsButton(), 'Click Products Button');
 
         // Add products to cart
         await testStep.log(productPage.clickProductsButton(), 'Click Products Button');
         for (const product of products.products) {
-            await productPage.searchProduct(product.name);
-            await productPage.addToCart(product.name);
-            await cartPage.clickContinueShoppingButton();
+            await testStep.log(productPage.searchProduct(product.name), `Search Product: ${product.name}`);
+            await testStep.log(productPage.addToCart(product.name), `Add Product to Cart: ${product.name}`);
+            await testStep.log(cartPage.clickContinueShoppingButton(), 'Click Continue Shopping Button');
         }
-
+        
         // Navigate to cart and checkout
         await testStep.log(cartPage.clickCartButton(), 'Click Cart Button');
-        await testStep.log(cartPage.verifyCartPageDisplayed(), 'Verify Cart Page is Displayed');
         await testStep.log(cartPage.clickProceedToCheckoutButton(), 'Click Proceed To Checkout');
         await testStep.log(cartPage.clickRegisterLoginButton(), 'Click Register/Login Button');
-
+        
         // Register new account
-        await testStep.log(signupPage.fillSignupDetails(user.name, user.email), 'Fill Signup Details');
-        await testStep.log(signupPage.createAccount({
-            title: user.title,
-            password: user.password,
-            dateOfBirth: user.dateOfBirth,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            company: user.company,
-            address1: user.address1,
-            address2: user.address2,
-            country: user.country,
-            state: user.state,
-            city: user.city,
-            zipcode: user.zipcode,
-            mobileNumber: user.mobileNumber
-        }), 'Create Account');
+        await testStep.log(signUpPage.signInWithCredentials(user.name, user.email), 'Sign In With Credentials');
+        await testStep.log(signUpPage.fillSignUpFormAndCreateAccount(user), 'Create New User');
+        await page.pause();
 
-        await testStep.log(signupPage.verifyAccountCreated(), 'Verify Account Created');
-        await testStep.log(signupPage.clickContinueButton(), 'Click Continue Button');
-        await testStep.log(signupPage.verifyLoggedInAsUsername(user.name), 'Verify Logged in as Username');
-
+        await testStep.log(signUpPage.isSignUpSuccessful(), 'Verify Sign Up Successful');
+        await page.pause();
+        //await testStep.log(signUpPage.clickContinueButton(), 'Click Continue Button');
+        //await testStep.log(signUpPage.verifyLoggedInAsUsername(user.name), 'Verify Logged in as Username');
+/*
         // Complete checkout process
         await testStep.log(cartPage.clickCartButton(), 'Click Cart Button');
         await testStep.log(cartPage.clickProceedToCheckoutButton(), 'Click Proceed To Checkout');

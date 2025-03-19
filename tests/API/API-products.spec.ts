@@ -5,9 +5,10 @@ import { generateUser } from '../../shared/UserData';
 
 test.describe('Product API Tests', () => {
     let sharedSteps: SharedSteps;
-    const BRANDS_LIST_ENDPOINT = "https://automationexercise.com/api/brandsList";
-    const PRODUCTS_LIST_ENDPOINT = "https://automationexercise.com/api/productsList";
-    const SEARCH_PRODUCT_ENDPOINT = 'https://automationexercise.com/api/searchProduct';
+    const BASE_URL = "https://automationexercise.com/api/";
+    const BRANDS_LIST_ENDPOINT = BASE_URL + "brandsList";
+    const PRODUCTS_LIST_ENDPOINT = BASE_URL + "productsList";
+    const SEARCH_PRODUCT_ENDPOINT = BASE_URL + "searchProduct";
 
     test.beforeEach(async ({ page }) => {
         sharedSteps = new SharedSteps(page);

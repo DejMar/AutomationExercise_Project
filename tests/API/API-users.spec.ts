@@ -2,13 +2,15 @@ import { test, expect } from '@playwright/test';
 import { SharedSteps } from '../../shared/SharedSteps';
 import { generateUser } from '../../shared/UserData';
 import { validationMessages } from '../../messages/validationMessages';
+import { userData } from '../../data/userData';
 
 test.describe('Users API Tests', () => {
     let sharedSteps: SharedSteps;
-    const CREATE_ACCOUNT_ENDPOINT = "https://automationexercise.com/api/createAccount";
-    const VERIFY_LOGIN_ENDPOINT = "https://automationexercise.com/api/verifyLogin";
-    const GET_USER_DETAIL_ENDPOINT = "https://automationexercise.com/api/getUserDetailByEmail";
-    const DELETE_ACCOUNT_ENDPOINT = "https://automationexercise.com/api/deleteAccount";
+    const BASE_URL = "https://automationexercise.com/api/";
+    const CREATE_ACCOUNT_ENDPOINT = BASE_URL + "createAccount";
+    const VERIFY_LOGIN_ENDPOINT = BASE_URL + "verifyLogin";
+    const GET_USER_DETAIL_ENDPOINT = BASE_URL + "getUserDetailByEmail";
+    const DELETE_ACCOUNT_ENDPOINT = BASE_URL + "deleteAccount";
 
     test.beforeEach(async ({ page }) => {
         sharedSteps = new SharedSteps(page);
@@ -17,8 +19,8 @@ test.describe('Users API Tests', () => {
     test('07 - POST /api/verifyLogin with valid credentials returns success', async ({ request }) => {
         // Prepare form data
         const formData = new URLSearchParams();
-        formData.append('email', 'Ana_Kihn2@hotmail.com');
-        formData.append('password', 'gVkmR3KjKdeKIE2');
+        formData.append('email', userData.validUsername);
+        formData.append('password', userData.validPassword);
 
         // Send POST request
         const response = await request.post(VERIFY_LOGIN_ENDPOINT, {
@@ -38,13 +40,13 @@ test.describe('Users API Tests', () => {
         expect(responseBody.responseCode).toBe(200);
 
         // Verify success message
-        expect(responseBody.message).toBe('User exists!');
+        expect(responseBody.message).toBe(validationMessages.userExistsMessage);
     });
 
     test('08 - POST /api/verifyLogin without email parameter returns 400', async ({ request }) => {
         // Prepare form data with only password
         const formData = new URLSearchParams();
-        formData.append('password', 'testpassword');
+        formData.append('password', userData.validPassword);
 
         // Send POST request
         const response = await request.post(VERIFY_LOGIN_ENDPOINT, {
@@ -87,8 +89,8 @@ test.describe('Users API Tests', () => {
     test('10 - POST /api/verifyLogin with invalid credentials returns user not found', async ({ request }) => {
         // Create form data with invalid credentials
         const formData = new URLSearchParams();
-        formData.append('email', 'invalid@email.com');
-        formData.append('password', 'invalidpassword');
+        formData.append('email', userData.invalidUsername);
+        formData.append('password', userData.invalidPassword);
 
         // Send POST request
         const response = await request.post(VERIFY_LOGIN_ENDPOINT, {
