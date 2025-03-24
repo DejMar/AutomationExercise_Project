@@ -6,7 +6,7 @@ import { validationMessages } from '../../messages/validationMessages';
 import { TestStep } from '../../shared/TestStep';
 import { CartPage } from '../../pages/CartPage';
 import * as fs from 'fs';
-import { generateCreditCardDetails, generateUser } from '../../shared/UserData';
+import { generateUser } from '../../shared/UserData';
 import { userData } from '../../data/userData';
 
 test.describe('Product Page Tests', () => {

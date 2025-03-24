@@ -14,5 +14,6 @@ export const validationMessages = {
     orderPlacedMessage: 'Order Placed!',
     accountDeletedTitle: 'Account Deleted!',
     accountDeletedMessage1: 'Your account has been permanently deleted!',
-    accountDeletedMessage2: 'You can create new account to take advantage of member privileges to enhance your online shopping experience with us.'
+    accountDeletedMessage2: 'You can create new account to take advantage of member privileges to enhance your online shopping experience with us.',
+    apiBadRequestMessage: 'Bad request, search_product parameter is missing in POST request.'
 }

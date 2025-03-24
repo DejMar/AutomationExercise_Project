@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { SharedSteps } from '../../shared/SharedSteps';
 import * as fs from 'fs/promises';
 import { generateUser } from '../../shared/UserData';
-
+import { validationMessages } from '../../messages/validationMessages';
 test.describe('Product API Tests', () => {
     let sharedSteps: SharedSteps;
     const BASE_URL = "https://automationexercise.com/api/";
@@ -46,10 +46,25 @@ test.describe('Product API Tests', () => {
 
         // Verify error message
         expect(responseBody.responseCode).toBe(405);
-        expect(responseBody.message).toBe('This request method is not supported.');
+        expect(responseBody.message).toBe(validationMessages.methodNotSupportedMessage);
     });
 
-    test('03 - GET /api/brandsList returns brands list successfully', async ({ request }) => {
+    test('03.1 - GET /api/brandsList returns brands list successfully', async ({ request }) => {
+        // Send GET request to brands list endpoint
+        const response = await request.get(BRANDS_LIST_ENDPOINT);
+
+        // Verify response status is 200
+        expect(response.status()).toBe(200);
+
+        // Parse response body
+        const responseBody = await response.json();
+
+         // Validate against the expected fixture
+        const expectedBrands = require('../../data/brands.json');
+        expect(responseBody).toEqual(expectedBrands);
+    });
+
+    test('03.2 - GET /api/brandsList returns brands list successfully', async ({ request }) => {
         // Send GET request to brands list endpoint
         const response = await request.get(BRANDS_LIST_ENDPOINT);
 
@@ -70,6 +85,7 @@ test.describe('Product API Tests', () => {
         // Compare response with brands.json file
         const areJsonsEqual = await sharedSteps.compareJsonFiles('../data', 'brands.json', '../test-results', 'responseBody.json');
         expect(areJsonsEqual).toBe(true);
+
     });
 
     test('04 - PUT /api/brandsList returns method not supported', async ({ request }) => {
@@ -84,7 +100,7 @@ test.describe('Product API Tests', () => {
 
         // Verify error message
         expect(responseBody.responseCode).toBe(405);
-        expect(responseBody.message).toBe('This request method is not supported.');
+        expect(responseBody.message).toBe(validationMessages.methodNotSupportedMessage);
     });
 
     test('05 - POST /api/searchProduct returns searched products list', async ({ request }) => {
@@ -141,6 +157,6 @@ test.describe('Product API Tests', () => {
         expect(responseBody.responseCode).toBe(400);
 
         // Verify error message
-        expect(responseBody.message).toBe('Bad request, search_product parameter is missing in POST request.');
+        expect(responseBody.message).toBe(validationMessages.apiBadRequestMessage);
     });
 });
