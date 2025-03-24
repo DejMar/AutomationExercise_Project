@@ -27,27 +27,36 @@ export class SignUpPage {
     private zipcodeInput = '#zipcode';
     private mobileNumberInput = '#mobile_number';
     private createAccountButton = 'button[data-qa="create-account"]';
-    private loginSignInButton = 'a[href="/login"]';
-    private continueButton = '//a[@data-qa="continue-button"]';
+    private loginSignInButton: Locator;
+    private continueButton: Locator;
     private logoutButton = 'a[href="/logout"]';
     private loginEmailInput = '[data-qa="login-email"]';
     private loginPasswordInput = '[data-qa="login-password"]';
     private loginButton = '[data-qa="login-button"]';
     private errorMessage: Locator;
-
     private signupNameInput = 'input[data-qa="signup-name"]';
     private signupEmailInput = 'input[data-qa="signup-email"]';
     private signupButton = 'button[data-qa="signup-button"]';
-    
+    private deleteAccountButton: Locator;
+    private accountDeletedHeader: Locator;
+    private accountDeletedMessage1: Locator;
+    private accountDeletedMessage2: Locator;
     constructor(page: Page) {
         this.page = page;
         this.passwordInput = this.page.getByLabel('Password *');
         this.errorMessage = this.page.locator('p[style="color: red;"]');
+        this.continueButton = this.page.getByRole('link', { name: 'Continue' });
+        this.loginSignInButton = this.page.getByRole('link', { name: 'Login' });
+        this.deleteAccountButton = this.page.getByRole('link', { name: ' Delete Account' });
+        // Locators for Account Deleted Text need to be updated
+        this.accountDeletedHeader = this.page.getByText('Account Deleted!');
+        this.accountDeletedMessage1 = this.page.getByText('Your account has been permanently deleted!');
+        this.accountDeletedMessage2 = this.page.getByText('You can create new account to take advantage of member privileges to enhance your online shopping experience with us.');
     }
 
     // Methods
     async clickLoginButton() {
-        await this.page.click(this.loginSignInButton);
+        await this.loginSignInButton.click();
     }
 
     async fillSignUpForm(user: User) {
@@ -90,7 +99,7 @@ export class SignUpPage {
         return successMessage === 'Account Created!';
     }
     async clickContinueButton() {
-        await this.page.click(this.continueButton);
+        await this.continueButton.click();
     }
 
     async isLogoutButtonDisplayed(): Promise<boolean> {
@@ -119,5 +128,19 @@ export class SignUpPage {
 
     async clickLogoutButton() {
         await this.page.click(this.logoutButton);
+    }
+
+    async clickDeleteAccountButton() {
+        await this.deleteAccountButton.click();
+    }
+
+    async verifyAccountDeletedText() {
+        const accountDeletedHeader = await this.accountDeletedHeader.textContent();
+        const accountDeletedMessage1 = await this.accountDeletedMessage1.textContent();
+        const accountDeletedMessage2 = await this.accountDeletedMessage2.textContent();
+
+        expect(accountDeletedHeader).toBe(validationMessages.accountDeletedTitle);
+        expect(accountDeletedMessage1).toBe(validationMessages.accountDeletedMessage1);
+        expect(accountDeletedMessage2).toBe(validationMessages.accountDeletedMessage2);
     }
 }

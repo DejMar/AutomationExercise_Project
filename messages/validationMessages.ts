@@ -10,5 +10,9 @@ export const validationMessages = {
     userUpdatedMessage: 'User updated!',
     userExistsMessage: 'User exists!',
     accountDeletedMessage: 'Account deleted!',
-    subscriptionSuccessMessage: 'You have been successfully subscribed!'
+    subscriptionSuccessMessage: 'You have been successfully subscribed!',
+    orderPlacedMessage: 'Order Placed!',
+    accountDeletedTitle: 'Account Deleted!',
+    accountDeletedMessage1: 'Your account has been permanently deleted!',
+    accountDeletedMessage2: 'You can create new account to take advantage of member privileges to enhance your online shopping experience with us.'
 }

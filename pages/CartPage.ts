@@ -1,15 +1,41 @@
-import { Page, expect } from "@playwright/test";
-import { generateUser } from "../shared/UserData";
-
+import { Locator, Page, expect } from "@playwright/test";
+import { generateCreditCardDetails } from "../shared/UserData";
 export class CartPage {
     private readonly page: Page;
-
+    private readonly continueShoppingButton: Locator;
+    private readonly cartButton: Locator;
+    private readonly proceedToCheckoutButton: Locator;
+    private readonly registerLoginButton: Locator;
+    private readonly orderCommentInput: Locator;
+    private readonly placeOrderButton: Locator;
+    private readonly nameOnCardInput: Locator;
+    private readonly cardNumberInput: Locator;
+    private readonly expiryMonthInput: Locator;
+    private readonly expiryYearInput: Locator;
+    private readonly cvvInput: Locator;
+    private readonly orderPlacedText: Locator;
+    private readonly downloadInvoiceLink: Locator;
+    private readonly continueButton: Locator;
     constructor(page: Page) {
         this.page = page;
+        this.continueShoppingButton = page.getByRole('button', { name: 'Continue Shopping' });
+        this.cartButton = page.getByRole('link', { name: 'Cart' });
+        this.proceedToCheckoutButton = page.getByText('Proceed To Checkout');
+        this.registerLoginButton = page.getByRole('link', { name: 'Register / Login' });
+        this.orderCommentInput = page.locator('textarea[name="message"]');
+        this.placeOrderButton = page.getByRole('link', { name: 'Place Order' });
+        this.nameOnCardInput = page.locator('input[name="name_on_card"]');
+        this.cardNumberInput = page.locator('input[name="card_number"]');
+        this.cvvInput = page.getByPlaceholder('ex.');
+        this.expiryMonthInput = page.getByPlaceholder('MM');
+        this.expiryYearInput = page.getByPlaceholder('YYYY');
+        this.orderPlacedText = page.getByText('Order Placed!');
+        this.downloadInvoiceLink = page.getByRole('link', { name: 'Download Invoice' });
+        this.continueButton = page.getByRole('link', { name: 'Continue' });
     }
 
     async clickContinueShoppingButton() {
-        await this.page.click("text=Continue Shopping");
+        await this.continueShoppingButton.click();
     }
 
     async verifyCartContainsText(productName: string, expectedText: string) {
@@ -58,15 +84,15 @@ export class CartPage {
     }
 
     async clickCartButton() {
-        await this.page.click("text=Cart");
+        await this.cartButton.click();
     }s
 
     async clickProceedToCheckoutButton() {
-        await this.page.click("text=Proceed To Checkout");
+        await this.proceedToCheckoutButton.click();
     }
 
     async clickRegisterLoginButton() {
-        await this.page.getByRole('link', { name: 'Register / Login' }).click();
+        await this.registerLoginButton.click();
     }
 
     async verifyAddressDetails(user: { name: string; company: string; address1: string; address2: string; city: string; state: string; zipcode: string; country: string; mobileNumber: string; }) {
@@ -93,7 +119,6 @@ export class CartPage {
         expect(addressDetails.country).toBe(user.country);
         expect(addressDetails.phone).toBe(user.mobileNumber);
     }
-        //await this.page.waitForSelector("text=Address");
     async verifyBillingAddress(user: { name: string; company: string; address1: string; address2: string; city: string; state: string; zipcode: string; country: string; mobileNumber: string; }) {
         const billingAddressDetails = await this.page.$eval("#address_invoice", (element) => {
             return {
@@ -144,5 +169,32 @@ export class CartPage {
         const totalAmount = await this.page.$eval("tbody tr:last-child .cart_total_price", el => el.textContent?.trim());
         const expectedTotalAmount = products.products.reduce((sum, product) => sum + (product.price * product.quantity), 0);
         expect(totalAmount).toBe(`Rs. ${expectedTotalAmount}`);
+    }
+
+    async enterOrderComment(comment: string) {
+        await this.orderCommentInput.fill(comment);
+    }
+
+    async clickPlaceOrderButton() {
+        await this.placeOrderButton.click();
+    }
+
+    async enterPaymentDetails() {
+        const cardDetails = generateCreditCardDetails();
+        await this.nameOnCardInput.fill(cardDetails.nameOnCard);
+        await this.cardNumberInput.fill(cardDetails.cardNumber);
+        await this.expiryMonthInput.fill(cardDetails.expiryMonth);
+        await this.expiryYearInput.fill(cardDetails.expiryYear);
+        await this.cvvInput.fill(cardDetails.cvc);
+    }
+
+    async clickPayAndConfirmOrderButton() {
+        await this.page.getByRole('button', { name: 'Pay and Confirm Order' }).click();
+    }
+
+    async verifyOrderPlacedSuccessfully(expectedText: string) {
+        await this.orderPlacedText.waitFor();
+        const orderPlacedText = await this.orderPlacedText.textContent();
+        expect(orderPlacedText).toBe(expectedText);
     }
 }

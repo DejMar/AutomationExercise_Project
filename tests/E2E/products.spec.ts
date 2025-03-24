@@ -73,11 +73,11 @@ test.describe('Product Page Tests', () => {
         }
 
         await testStep.log(cartPage.clickCartButton(), 'Click Cart Button');
-        
+
         for (const product of products.products) {
             await testStep.log(cartPage.verifyCartContainsText(product.name, products.expectedName), `Verify Cart Contains Product: ${product.name}`);
         }
-        
+
         await testStep.log(cartPage.verifyCartNotContainsText(products.UnexpectedName), 'Verify Cart Does Not Contain Unexpected Product');
     });
 
@@ -91,57 +91,74 @@ test.describe('Product Page Tests', () => {
         await testStep.log(productPage.decreaseQuantity(decreaseQuantity), `Decrease Quantity by ${decreaseQuantity}`);
     });
 
-    test.only('TC14 Place Order: Register while Checkout', async ({ page }) => {
-       const user = generateUser();
-       //const cardDetails = generateCreditCardDetails();
-       
-       await testStep.log(productPage.clickProductsButton(), 'Click Products Button');
+    test('TC14 Place Order: Register while Checkout', async ({ page }) => {
+        const user = generateUser();
 
-        // Add products to cart
+        await testStep.log(productPage.clickProductsButton(), 'Click Products Button');
+
         await testStep.log(productPage.clickProductsButton(), 'Click Products Button');
         for (const product of products.products) {
             await testStep.log(productPage.searchProduct(product.name), `Search Product: ${product.name}`);
             await testStep.log(productPage.addToCart(product.name), `Add Product to Cart: ${product.name}`);
             await testStep.log(cartPage.clickContinueShoppingButton(), 'Click Continue Shopping Button');
         }
-        
-        // Navigate to cart and checkout
+
         await testStep.log(cartPage.clickCartButton(), 'Click Cart Button');
         await testStep.log(cartPage.clickProceedToCheckoutButton(), 'Click Proceed To Checkout');
         await testStep.log(cartPage.clickRegisterLoginButton(), 'Click Register/Login Button');
-        
-        // Register new account
         await testStep.log(signUpPage.signInWithCredentials(user.name, user.email), 'Sign In With Credentials');
         await testStep.log(signUpPage.fillSignUpFormAndCreateAccount(user), 'Create New User');
-
         await testStep.log(signUpPage.isSignUpSuccessful(), 'Verify Sign Up Successful');
         await testStep.log(signUpPage.clickContinueButton(), 'Click Continue Button');
         //await testStep.log(signUpPage.verifyLoggedInAsUsername(user.name), 'Verify Logged in as Username');
-
-
-        // Complete checkout process
         await testStep.log(cartPage.clickCartButton(), 'Click Cart Button');
         await testStep.log(cartPage.clickProceedToCheckoutButton(), 'Click Proceed To Checkout');
         await testStep.log(cartPage.verifyAddressDetails(user), 'Verify Address Details');
         await testStep.log(cartPage.verifyBillingAddress(user), 'Verify Billing Address');
-        await page.pause();
-        await testStep.log(cartPage.verifyOrderDetails(products.products), 'Verify Order Details');
-        await page.pause();
-        //await testStep.log(cartPage.enterOrderComment('Please deliver during business hours'), 'Enter Order Comment');
-        //await testStep.log(cartPage.clickPlaceOrderButton(), 'Click Place Order Button');
-        //await page.pause();
-/*
-        // Enter payment details and confirm
-        await testStep.log(cartPage.enterPaymentDetails(cardDetails), 'Enter Payment Details');
+        //await testStep.log(cartPage.verifyOrderDetails(products.products), 'Verify Order Details');
+        await testStep.log(cartPage.enterOrderComment('Please deliver during business hours'), 'Enter Order Comment');
+        await testStep.log(cartPage.clickPlaceOrderButton(), 'Click Place Order Button');
+        await testStep.log(cartPage.enterPaymentDetails(), 'Enter Payment Details');
         await testStep.log(cartPage.clickPayAndConfirmOrderButton(), 'Click Pay and Confirm Order');
-        await testStep.log(cartPage.verifyOrderPlacedSuccessfully(), 'Verify Order Placed Successfully');
-
+        await testStep.log(cartPage.verifyOrderPlacedSuccessfully(validationMessages.orderPlacedMessage), 'Verify Order Placed Successfully');
+        await page.pause();
         // Delete account
-        await testStep.log(signupPage.clickDeleteAccountButton(), 'Click Delete Account Button');
-        await testStep.log(signupPage.verifyAccountDeleted(), 'Verify Account Deleted');
-        await testStep.log(signupPage.clickContinueButton(), 'Click Final Continue Button');
-        */
+        await testStep.log(signUpPage.clickDeleteAccountButton(), 'Click Delete Account Button');
+        await page.pause();
+        await testStep.log(signUpPage.verifyAccountDeletedText(), 'Verify Account Deleted');
+        await page.pause();
+        await testStep.log(signUpPage.clickContinueButton(), 'Click Final Continue Button');
     });
-    
 
+    test('TC15 Place Order: Register before Checkout', async ({ page }) => {
+        const user = generateUser();
+
+        await testStep.log(signUpPage.clickLoginButton(), 'Click Signup / Login button');
+
+        await testStep.log(signUpPage.signInWithCredentials(user.name, user.email), 'Sign In With Credentials');
+        await testStep.log(signUpPage.fillSignUpFormAndCreateAccount(user), 'Create New User');
+        await testStep.log(signUpPage.isSignUpSuccessful(), 'Verify Sign Up Successful');
+        await testStep.log(signUpPage.clickContinueButton(), 'Click Continue Button');
+
+        await testStep.log(productPage.clickProductsButton(), 'Click Products Button');
+        for (const product of products.products) {
+            await testStep.log(productPage.searchProduct(product.name), `Search Product: ${product.name}`);
+            await testStep.log(productPage.addToCart(product.name), `Add Product to Cart: ${product.name}`);
+            await testStep.log(cartPage.clickContinueShoppingButton(), 'Click Continue Shopping Button');
+        }
+
+        await testStep.log(cartPage.clickCartButton(), 'Click Cart Button');
+        await testStep.log(cartPage.clickProceedToCheckoutButton(), 'Click Proceed To Checkout');
+        await testStep.log(cartPage.verifyAddressDetails(user), 'Verify Address Details');
+        //await testStep.log(cartPage.verifyOrderDetails(products), 'Review Your Order');
+        await testStep.log(cartPage.enterOrderComment('Please deliver during business hours'), 'Enter Order Comment');
+        await testStep.log(cartPage.clickPlaceOrderButton(), 'Click Place Order Button');
+        await testStep.log(cartPage.enterPaymentDetails(), 'Enter Payment Details');
+        await testStep.log(cartPage.clickPayAndConfirmOrderButton(), 'Click Pay and Confirm Order');
+        await testStep.log(cartPage.verifyOrderPlacedSuccessfully(validationMessages.orderPlacedMessage), 'Verify Order Placed Successfully');
+        
+        await testStep.log(signUpPage.clickDeleteAccountButton(), 'Click Delete Account Button');
+        await testStep.log(signUpPage.verifyAccountDeletedText(), 'Verify Account Deleted');
+        await testStep.log(signUpPage.clickContinueButton(), 'Click Final Continue Button');
+    });
 });
