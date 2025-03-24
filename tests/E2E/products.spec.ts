@@ -113,21 +113,24 @@ test.describe('Product Page Tests', () => {
         // Register new account
         await testStep.log(signUpPage.signInWithCredentials(user.name, user.email), 'Sign In With Credentials');
         await testStep.log(signUpPage.fillSignUpFormAndCreateAccount(user), 'Create New User');
-        await page.pause();
 
         await testStep.log(signUpPage.isSignUpSuccessful(), 'Verify Sign Up Successful');
-        await page.pause();
-        //await testStep.log(signUpPage.clickContinueButton(), 'Click Continue Button');
+        await testStep.log(signUpPage.clickContinueButton(), 'Click Continue Button');
         //await testStep.log(signUpPage.verifyLoggedInAsUsername(user.name), 'Verify Logged in as Username');
-/*
+
+
         // Complete checkout process
         await testStep.log(cartPage.clickCartButton(), 'Click Cart Button');
         await testStep.log(cartPage.clickProceedToCheckoutButton(), 'Click Proceed To Checkout');
-        await testStep.log(cartPage.verifyAddressDetails(), 'Verify Address Details');
-        await testStep.log(cartPage.verifyOrderDetails(), 'Verify Order Details');
-        await testStep.log(cartPage.enterOrderComment('Please deliver during business hours'), 'Enter Order Comment');
-        await testStep.log(cartPage.clickPlaceOrderButton(), 'Click Place Order Button');
-
+        await testStep.log(cartPage.verifyAddressDetails(user), 'Verify Address Details');
+        await testStep.log(cartPage.verifyBillingAddress(user), 'Verify Billing Address');
+        await page.pause();
+        await testStep.log(cartPage.verifyOrderDetails(products.products), 'Verify Order Details');
+        await page.pause();
+        //await testStep.log(cartPage.enterOrderComment('Please deliver during business hours'), 'Enter Order Comment');
+        //await testStep.log(cartPage.clickPlaceOrderButton(), 'Click Place Order Button');
+        //await page.pause();
+/*
         // Enter payment details and confirm
         await testStep.log(cartPage.enterPaymentDetails(cardDetails), 'Enter Payment Details');
         await testStep.log(cartPage.clickPayAndConfirmOrderButton(), 'Click Pay and Confirm Order');
