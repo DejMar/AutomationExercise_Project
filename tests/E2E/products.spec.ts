@@ -7,6 +7,7 @@ import { TestStep } from '../../shared/TestStep';
 import { CartPage } from '../../pages/CartPage';
 import * as fs from 'fs';
 import { generateCreditCardDetails, generateUser } from '../../shared/UserData';
+import { userData } from '../../data/userData';
 
 test.describe('Product Page Tests', () => {
     let sharedSteps: SharedSteps;
@@ -91,7 +92,7 @@ test.describe('Product Page Tests', () => {
         await testStep.log(productPage.decreaseQuantity(decreaseQuantity), `Decrease Quantity by ${decreaseQuantity}`);
     });
 
-    test('TC14 Place Order: Register while Checkout', async ({ page }) => {
+    test('TC14 Place Order: Register while Checkout', async ({ }) => {
         const user = generateUser();
 
         await testStep.log(productPage.clickProductsButton(), 'Click Products Button');
@@ -121,16 +122,12 @@ test.describe('Product Page Tests', () => {
         await testStep.log(cartPage.enterPaymentDetails(), 'Enter Payment Details');
         await testStep.log(cartPage.clickPayAndConfirmOrderButton(), 'Click Pay and Confirm Order');
         await testStep.log(cartPage.verifyOrderPlacedSuccessfully(validationMessages.orderPlacedMessage), 'Verify Order Placed Successfully');
-        await page.pause();
-        // Delete account
         await testStep.log(signUpPage.clickDeleteAccountButton(), 'Click Delete Account Button');
-        await page.pause();
         await testStep.log(signUpPage.verifyAccountDeletedText(), 'Verify Account Deleted');
-        await page.pause();
         await testStep.log(signUpPage.clickContinueButton(), 'Click Final Continue Button');
     });
 
-    test('TC15 Place Order: Register before Checkout', async ({ page }) => {
+    test('TC15 Place Order: Register before Checkout', async ({ }) => {
         const user = generateUser();
 
         await testStep.log(signUpPage.clickLoginButton(), 'Click Signup / Login button');
@@ -150,15 +147,53 @@ test.describe('Product Page Tests', () => {
         await testStep.log(cartPage.clickCartButton(), 'Click Cart Button');
         await testStep.log(cartPage.clickProceedToCheckoutButton(), 'Click Proceed To Checkout');
         await testStep.log(cartPage.verifyAddressDetails(user), 'Verify Address Details');
+        await testStep.log(cartPage.verifyBillingAddress(user), 'Verify Billing Address');
         //await testStep.log(cartPage.verifyOrderDetails(products), 'Review Your Order');
         await testStep.log(cartPage.enterOrderComment('Please deliver during business hours'), 'Enter Order Comment');
         await testStep.log(cartPage.clickPlaceOrderButton(), 'Click Place Order Button');
         await testStep.log(cartPage.enterPaymentDetails(), 'Enter Payment Details');
         await testStep.log(cartPage.clickPayAndConfirmOrderButton(), 'Click Pay and Confirm Order');
         await testStep.log(cartPage.verifyOrderPlacedSuccessfully(validationMessages.orderPlacedMessage), 'Verify Order Placed Successfully');
-        
         await testStep.log(signUpPage.clickDeleteAccountButton(), 'Click Delete Account Button');
         await testStep.log(signUpPage.verifyAccountDeletedText(), 'Verify Account Deleted');
         await testStep.log(signUpPage.clickContinueButton(), 'Click Final Continue Button');
+    });
+
+    test('TC16 Place Order: Login before Checkout', async ({ }) => {
+        await testStep.log(signUpPage.clickLoginButton(), 'Click Signup / Login button');
+        await testStep.log(signUpPage.loginWithCredentials(userData.validUsername, userData.validPassword), 'Sign In With Credentials');
+        //await testStep.log(signUpPage.verifyLoggedInAsUsername(user.name), 'Verify Logged in as Username');
+
+        await testStep.log(productPage.clickProductsButton(), 'Click Products Button');
+        for (const product of products.products) {
+            await testStep.log(productPage.searchProduct(product.name), `Search Product: ${product.name}`);
+            await testStep.log(productPage.addToCart(product.name), `Add Product to Cart: ${product.name}`);
+            await testStep.log(cartPage.clickContinueShoppingButton(), 'Click Continue Shopping Button');
+        }
+        await testStep.log(cartPage.clickCartButton(), 'Click Cart Button');
+        //await testStep.log(cartPage.verifyCartPageIsDisplayed(), 'Verify Cart Page is Displayed');
+        await testStep.log(cartPage.clickProceedToCheckoutButton(), 'Click Proceed To Checkout');
+
+        //await testStep.log(cartPage.verifyOrderDetails(products), 'Review Your Order');
+        await testStep.log(cartPage.enterOrderComment('Please deliver during business hours'), 'Enter Order Comment');
+        await testStep.log(cartPage.clickPlaceOrderButton(), 'Click Place Order Button');
+        await testStep.log(cartPage.enterPaymentDetails(), 'Enter Payment Details');
+        await testStep.log(cartPage.clickPayAndConfirmOrderButton(), 'Click Pay and Confirm Order');
+        await testStep.log(cartPage.verifyOrderPlacedSuccessfully(validationMessages.orderPlacedMessage), 'Verify Order Placed Successfully');
+        await testStep.log(signUpPage.clickLogoutButton(), 'Click Logout Button');
+    });
+
+    test('TC17 Remove Products From Cart', async ({ }) => {
+
+        await testStep.log(productPage.clickProductsButton(), 'Click Products Button');
+
+        for (const product of products.products) {
+            await testStep.log(productPage.searchProduct(product.name), `Search Product: ${product.name}`);
+            await testStep.log(productPage.addToCart(product.name), `Add Product to Cart: ${product.name}`);
+            await testStep.log(cartPage.clickContinueShoppingButton(), 'Click Continue Shopping Button');
+        }
+
+        await testStep.log(cartPage.clickCartButton(), 'Click Cart Button');
+        //await testStep.log(cartPage.isCartPageDisplayed(), 'Verify that cart page is displayed');
     });
 });

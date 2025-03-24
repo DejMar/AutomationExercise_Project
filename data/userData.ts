@@ -1,7 +1,9 @@
 export const userData = {
     validName: 'Ana Kihn',
-    validUsername: 'Ana_Kihn2@hotmail.com',
+    validUsername: 'peter.parker@hotmail.com',
     invalidUsername: 'Ana_Kihn3@hotmail.com',
-    validPassword: 'gVkmR3KjKdeKIE2',
+    validPassword: 'Testing_123!',
     invalidPassword: 'gVkmR3KjKde',
 }
+
+//

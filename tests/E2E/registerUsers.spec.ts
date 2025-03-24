@@ -28,7 +28,16 @@ test.describe('Users manipulation positive cases', () => {
         newUser = generateUser();
         await testStep.log(signUpPage.clickLoginButton(), 'Click Login Button');
         await testStep.log(signUpPage.signInWithCredentials(newUser.name, newUser.email), 'Sign In With Credentials');
-        await testStep.log(signUpPage.fillSignUpFormAndCreateAccount(newUser), 'Create New User');
+        await testStep.log(signUpPage.fillSignUpFormAndCreateAccount(newUser), 
+            `------------Create New User with------------ \n` +
+            `NAME: ${newUser.name}, \n` +
+            `EMAIL: ${newUser.email},  \n` +
+            `PASSWORD: ${newUser.password},  \n` +
+            `ADDRESS: ${newUser.address1},  \n` +
+            `CITY: ${newUser.city},  \n` +
+            `STATE: ${newUser.state},  \n` +
+            `ZIP: ${newUser.zipcode},  \n` +
+            `PHONE: ${newUser.mobileNumber} `);
         await testStep.log(signUpPage.isSignUpSuccessful(), 'Verify Sign Up Successful');
         await testStep.log(signUpPage.clickContinueButton(), 'Click Continue Button');
         await testStep.log(signUpPage.isLogoutButtonDisplayed(), 'Verify Logout Button Displayed');
