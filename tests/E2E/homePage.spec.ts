@@ -21,40 +21,6 @@ test.describe('Home Page Tests', () => {
         await sharedSteps.saveTestSteps(test.info().title, testStep.getSteps());
     });
 
-    test.skip('TC25 Verify Scroll Up using "Arrow" button and Scroll Down functionality', async ({ page }) => {
-        // Verify that home page is visible successfully
-        await testStep.log(homePage.verifyHomePageIsVisible(), 'Verify Home Page is Visible');
-
-        // Scroll down page to bottom
-        await testStep.log(page.evaluate(() => window.scrollTo(0, document.body.scrollHeight)), 'Scroll Down to Bottom');
-        
-        // Verify 'SUBSCRIPTION' is visible
-        await testStep.log(homePage.verifySubscriptionIsVisible(), 'Verify SUBSCRIPTION is Visible');
-
-        // Click on arrow at bottom right side to move upward
-        await testStep.log(homePage.clickScrollUpArrow(), 'Click Scroll Up Arrow');
-
-        // Verify that page is scrolled up and 'Full-Fledged practice website for Automation Engineers' text is visible on screen
-        await testStep.log(homePage.verifyScrollUpIsSuccessful(), 'Verify Scroll Up is Successful');
-    });
-    
-    test.skip('TC26 Verify Scroll Up without "Arrow" button and Scroll Down functionality', async ({ page }) => {
-        // Verify that home page is visible successfully
-        await testStep.log(homePage.verifyHomePageIsVisible(), 'Verify Home Page is Visible');
-
-        // Scroll down page to bottom
-        await testStep.log(page.evaluate(() => window.scrollTo(0, document.body.scrollHeight)), 'Scroll Down to Bottom');
-
-        // Verify 'SUBSCRIPTION' is visible
-        await testStep.log(homePage.verifySubscriptionIsVisible(), 'Verify SUBSCRIPTION is Visible');
-
-        // Scroll up page to top
-        await testStep.log(page.evaluate(() => window.scrollTo(0, 0)), 'Scroll Up to Top');
-
-        // Verify that page is scrolled up and 'Full-Fledged practice website for Automation Engineers' text is visible on screen
-        await testStep.log(homePage.verifyScrollUpIsSuccessful(), 'Verify Scroll Up is Successful');
-    });
-
     test('TC18 View Category Products', async ({ }) => {   
         await homePage.selectCategory(Category.Kids.name, Category.Kids.subcategory.TopsAndShirts);
         await homePage.verifyTitle(CategoryTitle.KidsTopsAndShirtsProducts);
@@ -91,5 +57,39 @@ test.describe('Home Page Tests', () => {
         await homePage.verifyTitle(BrandTitle.KookieKids);
         await homePage.clickBrand(Brand.Biba);
         await homePage.verifyTitle(BrandTitle.Biba);
+    });
+
+    test.skip('TC25 Verify Scroll Up using "Arrow" button and Scroll Down functionality', async ({ page }) => {
+        // Verify that home page is visible successfully
+        await testStep.log(homePage.verifyHomePageIsVisible(), 'Verify Home Page is Visible');
+
+        // Scroll down page to bottom
+        await testStep.log(page.evaluate(() => window.scrollTo(0, document.body.scrollHeight)), 'Scroll Down to Bottom');
+        
+        // Verify 'SUBSCRIPTION' is visible
+        await testStep.log(homePage.verifySubscriptionIsVisible(), 'Verify SUBSCRIPTION is Visible');
+
+        // Click on arrow at bottom right side to move upward
+        await testStep.log(homePage.clickScrollUpArrow(), 'Click Scroll Up Arrow');
+
+        // Verify that page is scrolled up and 'Full-Fledged practice website for Automation Engineers' text is visible on screen
+        await testStep.log(homePage.verifyScrollUpIsSuccessful(), 'Verify Scroll Up is Successful');
+    });
+    
+    test.skip('TC26 Verify Scroll Up without "Arrow" button and Scroll Down functionality', async ({ page }) => {
+        // Verify that home page is visible successfully
+        await testStep.log(homePage.verifyHomePageIsVisible(), 'Verify Home Page is Visible');
+
+        // Scroll down page to bottom
+        await testStep.log(page.evaluate(() => window.scrollTo(0, document.body.scrollHeight)), 'Scroll Down to Bottom');
+
+        // Verify 'SUBSCRIPTION' is visible
+        await testStep.log(homePage.verifySubscriptionIsVisible(), 'Verify SUBSCRIPTION is Visible');
+
+        // Scroll up page to top
+        await testStep.log(page.evaluate(() => window.scrollTo(0, 0)), 'Scroll Up to Top');
+
+        // Verify that page is scrolled up and 'Full-Fledged practice website for Automation Engineers' text is visible on screen
+        await testStep.log(homePage.verifyScrollUpIsSuccessful(), 'Verify Scroll Up is Successful');
     });
 });
