@@ -19,6 +19,11 @@ The test suite provides comprehensive test coverage for an e-commerce website, i
 - Verifies success messages and form visibility
 - Tests form field validations
 
+### Home Page Testing (TC18, TC19)
+- Verifies category product views for Men, Women, and Kids
+- Validates brand product views for multiple brands
+- Tests page title accuracy for selected categories and brands
+
 ### Product Management (TC08, TC09)
 - Verifies product listing and detail pages
 - Tests product search functionality with different keywords
@@ -42,6 +47,11 @@ The test suite provides comprehensive test coverage for an e-commerce website, i
 - New user registration during checkout
 - Address and payment information validation
 - Order confirmation verification
+
+### Scroll Functionality Testing (TC25, TC26)
+- Verifies scroll up using "Arrow" button and scroll down functionality
+- Tests scroll up without "Arrow" button and scroll down functionality
+- Validates visibility of key page elements after scrolling
 
 ## Technical Implementation
 

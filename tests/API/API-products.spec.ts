@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { SharedSteps } from '../../shared/SharedSteps';
 import * as fs from 'fs/promises';
-import { generateUser } from '../../shared/UserData';
 import { validationMessages } from '../../messages/validationMessages';
+
 test.describe('Product API Tests', () => {
     let sharedSteps: SharedSteps;
     const BASE_URL = "https://automationexercise.com/api/";

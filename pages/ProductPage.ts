@@ -150,5 +150,34 @@ export class ProductPage {
         await quantityInput.fill(newValue.toString());
         await expect(quantityInput).toHaveValue(newValue.toString());
     }
+
+    async getSearchResults() {
+        const productTitles = await this.page.locator(this.searchedProductTitle).all();
+        return productTitles.map(async (title) => ({
+            name: await title.textContent(),
+            price: await title.locator(this.priceSpan).textContent(),
+        }));
+    }
+    
+    async verifyWriteYourReviewIsVisible() {
+        await expect(this.page.getByRole('link', { name: 'Write Your Review' })).toBeVisible();
+    }
+
+    async enterReviewDetails(name: string, email: string, review: string) {
+        await this.page.fill(this.nameInput, name);
+        await this.page.fill(this.emailInput, email);
+        await this.page.fill(this.reviewTextarea, review);
+    }
+
+    async clickSubmitReviewButton() {
+        await this.page.click(this.submitReviewButton);
+    }
+
+    async verifyReviewSuccessMessage(expectedMessage: string) {
+        const successMessageLocator = this.page.locator('#reviews div').filter({ hasText: 'Thank you for your review.' });
+        await expect(successMessageLocator).toHaveText(expectedMessage);
+    }
+    
+
     //#endregion
 }

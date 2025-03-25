@@ -197,4 +197,26 @@ export class CartPage {
         const orderPlacedText = await this.orderPlacedText.textContent();
         expect(orderPlacedText).toBe(expectedText);
     }
+
+    async removeProductFromCart(productName: string) {
+        const productRow = await this.page.locator(`#cart_info_table tbody tr`).filter({
+            has: this.page.locator(`.cart_description h4 a`, { hasText: productName })
+        });
+        await productRow.locator('.cart_delete .cart_quantity_delete').click();
+    }
+
+    async verifyProductRemovedFromCart(productName: string) {
+        const productRow = await this.page.locator(`#cart_info_table tbody tr`).filter({
+            has: this.page.locator(`.cart_description h4 a`, { hasText: productName })
+        });
+        await expect(productRow).toBeHidden();
+    }
+
+    async verifyProductInCartAfterLogin(productName: string) {
+        const productRow = await this.page.locator(`#cart_info_table tbody tr`).filter({
+            has: this.page.locator(`.cart_description h4 a`, { hasText: productName })
+        });
+        await expect(productRow).toBeVisible();
+    }
+    
 }

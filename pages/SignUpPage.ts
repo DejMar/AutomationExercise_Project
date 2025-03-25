@@ -143,4 +143,8 @@ export class SignUpPage {
         expect(accountDeletedMessage1).toBe(validationMessages.accountDeletedMessage1);
         expect(accountDeletedMessage2).toBe(validationMessages.accountDeletedMessage2);
     }
+    async verifyLoggedInAsUsername(expectedName: string) {
+        const loggedInAsText = await this.page.getByText(`Logged in as ${expectedName}`).textContent();
+        expect(loggedInAsText).toContain(`Logged in as ${expectedName}`);
+    }
 }

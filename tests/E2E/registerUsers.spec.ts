@@ -46,12 +46,14 @@ test.describe('Users manipulation positive cases', () => {
     test('TC02 Login with new user', async ({ }) => {
         await testStep.log(signUpPage.clickLoginButton(), 'Click Login Button');
         await testStep.log(signUpPage.loginWithCredentials(userData.validUsername, userData.validPassword), 'Login With Credentials');
+        await testStep.log(signUpPage.verifyLoggedInAsUsername(userData.validName), `Verify Logged in as ${userData.validName}`);
         await testStep.log(signUpPage.isLogoutButtonDisplayed(), 'Verify Logout Button Displayed');
     });
 
     test('TC04 Logout User', async ({ }) => {
         await signUpPage.clickLoginButton();
         await testStep.log(signUpPage.loginWithCredentials(userData.validUsername, userData.validPassword), 'Login With Credentials');
+        await testStep.log(signUpPage.verifyLoggedInAsUsername(userData.validName), `Verify Logged in as ${userData.validName}`);
         await testStep.log(signUpPage.isLogoutButtonDisplayed(), 'Verify Logout Button Displayed');
         await testStep.log(signUpPage.clickLogoutButton(), 'Click Logout Button');
         //TODO add verification that user is logged out
@@ -84,6 +86,7 @@ test.describe('Users manipulation negative cases', () => {
     test('TC05 Register User with existing email', async ({ }) => {
         await testStep.log(signUpPage.clickLoginButton(), 'Click Login Button');
         await testStep.log(signUpPage.loginWithCredentials(userData.validUsername, userData.validPassword), 'Login With Credentials');
+        await testStep.log(signUpPage.verifyLoggedInAsUsername(userData.validName), `Verify Logged in as ${userData.validName}`);
         await testStep.log(signUpPage.isLogoutButtonDisplayed(), 'Verify Logout Button Displayed');
         await testStep.log(signUpPage.clickLogoutButton(), 'Click Logout Button');
         await testStep.log(signUpPage.clickLoginButton(), 'Click Login Button');
