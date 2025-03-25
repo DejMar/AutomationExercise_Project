@@ -2,6 +2,7 @@ import { test } from '@playwright/test';
 import { SharedSteps } from '../../shared/SharedSteps';
 import { HomePage } from '../../pages/HomePage';
 import { TestStep } from '../../shared/TestStep';
+import { Brand, BrandTitle, Category, CategoryTitle } from '../../messages/pageTitles';
 
 test.describe('Home Page Tests', () => {
     let sharedSteps: SharedSteps;
@@ -52,5 +53,43 @@ test.describe('Home Page Tests', () => {
 
         // Verify that page is scrolled up and 'Full-Fledged practice website for Automation Engineers' text is visible on screen
         await testStep.log(homePage.verifyScrollUpIsSuccessful(), 'Verify Scroll Up is Successful');
+    });
+
+    test('TC18 View Category Products', async ({ }) => {   
+        await homePage.selectCategory(Category.Kids.name, Category.Kids.subcategory.TopsAndShirts);
+        await homePage.verifyTitle(CategoryTitle.KidsTopsAndShirtsProducts);
+        await homePage.selectCategory(Category.Kids.name, Category.Kids.subcategory.Dress);
+        await homePage.verifyTitle(CategoryTitle.KidsDressProducts);
+
+        await homePage.selectCategory(Category.Men.name, Category.Men.subcategory.Tshirts);
+        await homePage.verifyTitle(CategoryTitle.MenTshirtsProducts);
+        await homePage.selectCategory(Category.Men.name, Category.Men.subcategory.Jeans);
+        await homePage.verifyTitle(CategoryTitle.MenJeansProducts);
+
+        await homePage.selectCategory(Category.Women.name, Category.Women.subcategory.Tops);
+        await homePage.verifyTitle(CategoryTitle.WomenTopsProducts);
+        await homePage.selectCategory(Category.Women.name, Category.Women.subcategory.Dress);
+        await homePage.verifyTitle(CategoryTitle.WomenDressProducts);
+        await homePage.selectCategory(Category.Women.name, Category.Women.subcategory.Saree);
+        await homePage.verifyTitle(CategoryTitle.WomenSareeProducts);
+    });
+
+    test('TC19 View Brand Products', async ({ }) => {
+        await homePage.clickBrand(Brand.Polo);
+        await homePage.verifyTitle(BrandTitle.Polo);
+        await homePage.clickBrand(Brand.Hm);
+        await homePage.verifyTitle(BrandTitle.Hm);
+        await homePage.clickBrand(Brand.Madame);
+        await homePage.verifyTitle(BrandTitle.Madame);
+        await homePage.clickBrand(Brand.MastAndHarbour);
+        await homePage.verifyTitle(BrandTitle.MastAndHarbour);
+        await homePage.clickBrand(Brand.Babyhug);
+        await homePage.verifyTitle(BrandTitle.Babyhug);
+        await homePage.clickBrand(Brand.AllenSollyJunior);
+        await homePage.verifyTitle(BrandTitle.AllenSollyJunior);
+        await homePage.clickBrand(Brand.KookieKids);
+        await homePage.verifyTitle(BrandTitle.KookieKids);
+        await homePage.clickBrand(Brand.Biba);
+        await homePage.verifyTitle(BrandTitle.Biba);
     });
 });

@@ -25,4 +25,32 @@ export class HomePage {
     async verifyScrollUpIsSuccessful() {
         await expect(this.page.locator(this.scrollUpSuccessLocator)).toBeVisible();
     }
+    private womenCategoryButtonLocator = 'a[data-toggle="collapse"][data-parent="#accordian"][href="#Women"]';
+
+    async clickWomenCategoryButton() {
+        await this.page.locator(this.womenCategoryButtonLocator).click();
+    }
+    private dressCategoryButtonLocator = 'a[href="/category_products/1"]';
+
+    async clickDressCategoryButton() {
+        await this.page.locator(this.dressCategoryButtonLocator).click();
+    }
+
+    async selectCategory(category: string, subcategory: string) {
+        const categoryLocator = `a[data-toggle="collapse"][data-parent="#accordian"][href="#${category}"]`;
+        const subcategoryLocator = `#${category} a[href*="/category_products/"]:has-text("${subcategory}")`;
+
+        await this.page.locator(categoryLocator).click();
+        await this.page.locator(subcategoryLocator).click();
+    }
+    async verifyTitle(expectedText: string) {
+        const locator = 'h2.title.text-center';
+        await expect(this.page.locator(locator)).toHaveText(expectedText);
+    }
+
+    async clickBrand(brandName: string) {
+        const brandLocator = `div.brands_products ul.nav.nav-pills.nav-stacked li a:has-text("${brandName}")`;
+        await this.page.locator(brandLocator).click();
+    }
+
 }
