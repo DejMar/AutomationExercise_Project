@@ -44,8 +44,8 @@ export class HomePage {
         await this.page.locator(subcategoryLocator).click();
     }
     async verifyTitle(expectedText: string) {
-        const locator = 'h2.title.text-center';
-        await expect(this.page.locator(locator)).toHaveText(expectedText);
+        const titleLocator = 'h2.title.text-center';
+        await expect(this.page.locator(titleLocator)).toHaveText(expectedText);
     }
 
     async clickBrand(brandName: string) {
