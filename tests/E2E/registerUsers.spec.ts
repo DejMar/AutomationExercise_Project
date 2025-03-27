@@ -37,7 +37,8 @@ test.describe('Users manipulation positive cases', () => {
             `CITY: ${newUser.city},  \n` +
             `STATE: ${newUser.state},  \n` +
             `ZIP: ${newUser.zipcode},  \n` +
-            `PHONE: ${newUser.mobileNumber} `);
+            `PHONE: ${newUser.mobileNumber} \n`+
+             `-------------------------------------------- \n`);
         await testStep.log(signUpPage.isSignUpSuccessful(), 'Verify Sign Up Successful');
         await testStep.log(signUpPage.clickContinueButton(), 'Click Continue Button');
         await testStep.log(signUpPage.isLogoutButtonDisplayed(), 'Verify Logout Button Displayed');

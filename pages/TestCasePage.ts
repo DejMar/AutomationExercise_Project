@@ -4,14 +4,19 @@ export class TestCasePage {
     private page: Page;
 
     // Locators
-    private testCasesButton = 'a[href="/test_cases"]';
-    private apiTestCasesButton = 'a[href="/api_list"]';
-    private testCasesTitle = 'h2.title.text-center';
-    private testCasesDescription = '.panel-group h5';
-    private testCaseItem = '.panel-group .panel-title';
+    private testCasesButton: string;
+    private apiTestCasesButton: string;
+    private testCasesTitle: string;
+    private testCasesDescription: string;
+    private testCaseItem: string;
 
     constructor(page: Page) {
         this.page = page;
+        this.testCasesButton = 'a[href="/test_cases"]';
+        this.apiTestCasesButton = 'a[href="/api_list"]';
+        this.testCasesTitle = 'h2.title.text-center';
+        this.testCasesDescription = '.panel-group h5';
+        this.testCaseItem = '.panel-group .panel-title';
     }
 
     async clickTestCasesButton() {

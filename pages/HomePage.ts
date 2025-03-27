@@ -2,12 +2,15 @@ import { expect, Page } from '@playwright/test';
 
 export class HomePage {
     private page: Page;
-    private subscriptionLocator = '//*[@id="footer"]/div[1]/div/div/div[2]/div/h2';
-    private scrollUpArrowLocator = '//*[@id="scrollUp"]';
-    private scrollUpSuccessLocator = '//*[@id="full-width-banner-1"]/div/div/div/div[2]/div[2]/h2';
+    private subscriptionLocator: string;
+    private scrollUpArrowLocator: string;
+    private scrollUpSuccessLocator: string;
 
     constructor(page: Page) {
         this.page = page;
+        this.subscriptionLocator = '//*[@id="footer"]/div[1]/div/div/div[2]/div/h2';
+        this.scrollUpArrowLocator = '//*[@id="scrollUp"]';
+        this.scrollUpSuccessLocator = '//*[@id="full-width-banner-1"]/div/div/div/div[2]/div[2]/h2';
     }
 
     async verifyHomePageIsVisible() {

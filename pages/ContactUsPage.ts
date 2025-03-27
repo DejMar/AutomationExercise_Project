@@ -5,19 +5,29 @@ export class ContactUsPage {
     private page: Page;
 
     // Locators
-    private contactUsLink = 'a[href="/contact_us"]';
-    private getInTouchTitle = 'h2.title.text-center:has-text("Get In Touch")';
-    private nameInput = '[data-qa="name"]';
-    private emailInput = '[data-qa="email"]';
-    private subjectInput = '[data-qa="subject"]';
-    private messageInput = '[data-qa="message"]';
-    private fileUploadInput = 'input[name="upload_file"]';
-    private submitButton = '[data-qa="submit-button"]';
-    private successMessage = "//div[contains(@class, 'status') and contains(@class, 'alert-success') and text()='Success! Your details have been submitted successfully.']";
-    private homeButton = 'a[href="/"]';
+    private contactUsLink: string;
+    private getInTouchTitle: string;
+    private nameInput: string;
+    private emailInput: string;
+    private subjectInput: string;
+    private messageInput: string;
+    private fileUploadInput: string;
+    private submitButton: string;
+    private successMessage: string;
+    private homeButton: string;
 
     constructor(page: Page) {
         this.page = page;
+        this.contactUsLink = 'a[href="/contact_us"]';
+        this.getInTouchTitle = 'h2.title.text-center:has-text("Get In Touch")';
+        this.nameInput = '[data-qa="name"]';
+        this.emailInput = '[data-qa="email"]';
+        this.subjectInput = '[data-qa="subject"]';  
+        this.messageInput = '[data-qa="message"]';
+        this.fileUploadInput = 'input[name="upload_file"]';
+        this.submitButton = '[data-qa="submit-button"]';
+        this.successMessage = "//div[contains(@class, 'status') and contains(@class, 'alert-success') and text()='Success! Your details have been submitted successfully.']";
+        this.homeButton = 'a[href="/"]';
     }
 
     async clickContactUsButton() {
