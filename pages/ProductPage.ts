@@ -1,4 +1,4 @@
-import { expect, Page } from '@playwright/test';
+import { expect, Locator, Page } from '@playwright/test';
 import { pageTitles } from '../messages/pageTitles';
 
 export class ProductPage {
@@ -37,12 +37,18 @@ export class ProductPage {
     private subscriptionSuccessLocator = 'div.alert-success.alert';
     private cartButtonLocator = 'a[href="/view_cart"] i.fa.fa-shopping-cart';
     private addToCartButtonLocator = 'a.add-to-cart';
-    private inputQuantity = 'input#quantity';
+    private inputQuantity = 'input#quantity';   
+    private linkAddToCartFromRecommendedItems: Locator;
+
+    private viewCartButton: Locator;
 
     //#endregion
 
     constructor(page: Page) {
         this.page = page;
+        this.linkAddToCartFromRecommendedItems = page.locator('#recommended-item-carousel').locator('.add-to-cart');
+        this.viewCartButton = page.locator('p.text-center a[href="/view_cart"]');
+
     }
 
     //#region Methods
@@ -178,6 +184,26 @@ export class ProductPage {
         await expect(successMessageLocator).toHaveText(expectedMessage);
     }
     
+    async addRandomRecommendedItemToCart() {
+    await this.linkAddToCartFromRecommendedItems.last().click();
+    }
 
+    async clickViewCartButton() {
+        await this.viewCartButton.click();
+    }
+
+    async verifyProductInCart() {
+    const productRow = this.page.locator('tr#product-6');
+    await expect(productRow).toBeVisible();
+    /*
+    await expect(productRow.locator('td.cart_product a img.product_image')).toBeVisible();
+    await expect(productRow.locator('td.cart_description h4 a')).toHaveText('Summer White Top');
+    await expect(productRow.locator('td.cart_description p')).toHaveText('Women > Tops');
+    await expect(productRow.locator('td.cart_price p')).toHaveText('Rs. 400');
+    await expect(productRow.locator('td.cart_quantity button.disabled')).toHaveText('1');
+    await expect(productRow.locator('td.cart_total p.cart_total_price')).toHaveText('Rs. 400');
+    await expect(productRow.locator('td.cart_delete a.cart_quantity_delete')).toBeVisible();
+*/
+    }
     //#endregion
 }

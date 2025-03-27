@@ -8,6 +8,7 @@ import { CartPage } from '../../pages/CartPage';
 import * as fs from 'fs';
 import { generateUser } from '../../shared/UserData';
 import { userData } from '../../data/userData';
+import { addAbortListener } from 'events';
 
 test.describe('Product Page Tests', () => {
     let sharedSteps: SharedSteps;
@@ -228,16 +229,15 @@ test.describe('Product Page Tests', () => {
                 await testStep.log(cartPage.verifyCartContainsText(product.name, product.name), `Verify Product in Cart after Login: ${product.name}`);
             }
         }
+        
     });
 
-    test('TC21 Add review on product', async ({ page }) => {
+    test('TC21 Add review on product', async ({ }) => {
         await testStep.log(productPage.clickProductsButton(), 'Click Products Button');
         await testStep.log(productPage.verifyAllProductsTitle(), 'Verify All Products Title');
         
         await testStep.log(productPage.clickViewProductButton('1'), 'Click View Product Button');
-        await page.pause();
         await testStep.log(productPage.verifyWriteYourReviewIsVisible(), 'Verify Write Your Review is visible');
-        await page.pause();
         
         const reviewName = 'John Doe';
         const reviewEmail = 'john.doe@example.com';
@@ -249,9 +249,10 @@ test.describe('Product Page Tests', () => {
         //await testStep.log(productPage.verifyReviewSuccessMessage('Thank you for your review.'), 'Verify success message');
     });
 
-    test('TC22 Add to cart from Recommended items', async ({ }) => {
- 
-        
+    test('TC22 Add to cart from Recommended items', async ({ page }) => {
+        await testStep.log(productPage.addRandomRecommendedItemToCart(), 'Add Random Recommended Item to Cart');
+        await testStep.log(productPage.clickViewCartButton(), 'Click View Cart Button to verify product');
+        await testStep.log(productPage.verifyProductInCart(), 'Verify Product in Cart');
     });
 
     test('TC23 Verify address details in checkout page', async ({ }) => {
