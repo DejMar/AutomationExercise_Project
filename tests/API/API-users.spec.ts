@@ -11,7 +11,7 @@ test.describe('Users API Tests', () => {
     const VERIFY_LOGIN_ENDPOINT = BASE_URL + "verifyLogin";
     const GET_USER_DETAIL_ENDPOINT = BASE_URL + "getUserDetailByEmail";
     const DELETE_ACCOUNT_ENDPOINT = BASE_URL + "deleteAccount";
-
+    const UPDATE_ACCOUNT_ENDPOINT = BASE_URL + "updateAccount";
     test.beforeEach(async ({ page }) => {
         sharedSteps = new SharedSteps(page);
     });
@@ -268,7 +268,7 @@ test.describe('Users API Tests', () => {
         updateData.append('mobile_number', '+397114779');
 
         // Send PUT request to update user
-        const response = await request.put('https://automationexercise.com/api/updateAccount', {
+        const response = await request.put(UPDATE_ACCOUNT_ENDPOINT, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
