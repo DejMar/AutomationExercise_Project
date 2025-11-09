@@ -16,8 +16,11 @@ test.describe('Product Page Tests', () => {
     let testStep: TestStep;
     let cartPage: CartPage;
     let signUpPage: SignUpPage;
-    const testDataFilePath = './data/products.json';
-    const products = JSON.parse(fs.readFileSync(testDataFilePath, 'utf-8'));
+    const testDataFilePath = '../../data/products.json';
+    // Fix: Use require.resolve to get the correct absolute path for the JSON file
+    const path = require('path');
+    const productsPath = path.resolve(__dirname, testDataFilePath);
+    const products = JSON.parse(fs.readFileSync(productsPath, 'utf-8'));
 
     test.beforeEach(async ({ page }) => {
         sharedSteps = new SharedSteps(page);

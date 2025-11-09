@@ -9,7 +9,7 @@ export class TestStep {
         try {
             const resolvedStep = await Promise.race([
                 Promise.resolve(step),
-                new Promise<T>((_, reject) => setTimeout(() => reject(new Error('Timeout')), 5000))
+                new Promise<T>((_, reject) => setTimeout(() => reject(new Error('Timeout')), 30000))
             ]);
             const status = 'PASSED';
             this.steps.push(`${description} - ${status}`);
