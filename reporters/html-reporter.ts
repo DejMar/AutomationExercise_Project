@@ -561,8 +561,14 @@ export default class HtmlReporter implements Reporter {
 </body>
 </html>`;
 
-    await fs.writeFile(path.join(this.outputDir, 'index.html'), html);
-    console.log(`\n📊 HTML Report generated: ${path.join(this.outputDir, 'index.html')}`);
+    // Get current date in YYYY-MM-DD format
+    const now = new Date();
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    const dateStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`; // YYYY-MM-DD
+
+    const reportFile = `Regression-Report-${dateStr}.html`;
+    await fs.writeFile(path.join(this.outputDir, reportFile), html);
+    console.log(`\n📊 HTML Report generated: ${path.join(this.outputDir, reportFile)}`);
   }
 
   // Helper function to prettify file names into nice test group headings
